@@ -1,0 +1,25 @@
+server:
+  http_listen_port: 5100
+  grpc_listen_port: 5101
+
+positions:
+  filename: /var/log/promtail/positions.yaml
+
+clients:
+  - url: http://loki:5000/loki/api/v1/push
+
+scrape_configs:
+  - job_name: logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: canton
+          namespace: docker-compose
+          __path__: /var/log/promtail/canton.log
+      - targets:
+          - localhost
+        labels:
+          job: http-json
+          namespace: docker-compose
+          __path__: /var/log/promtail/http-json.log

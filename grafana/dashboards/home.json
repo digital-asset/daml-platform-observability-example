@@ -1,0 +1,59 @@
+{
+  "editable": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "**Endpoints**\n\n| Link | URL |\n|---|---|\n| <a href=\"http://localhost:9090/\" target=\"_blank\">Prometheus</a> | `http://localhost:9090/`\n| <a href=\"http://localhost:5100/\" target=\"_blank\">Promtail</a> | `http://localhost:5100/`\n| <a href=\"http://localhost:3000/\" target=\"_blank\">Grafana</a> | `http://localhost:3000/`\n| <a href=\"http://localhost:10011/\" target=\"_blank\">Ledger API</a> | `http://localhost:10011/`\n| <a href=\"http://localhost:4001/\" target=\"_blank\">HTTP JSON API</a> | `http://localhost:4001/`\n\n**Metrics**\n\n| Link | URL |\n|---|---|\n| <a href=\"http://localhost:9090/metrics\" target=\"_blank\">Prometheus</a> | `http://localhost:9090/metrics`\n| <a href=\"http://localhost:5000/metrics\" target=\"_blank\">Loki</a> | `http://localhost:5000/metrics`\n| <a href=\"http://localhost:5100/metrics\" target=\"_blank\">Promtail</a> | `http://localhost:5100/metrics`\n| <a href=\"http://localhost:3000/metrics\" target=\"_blank\">Grafana</a> | `http://localhost:3000/metrics`\n| <a href=\"http://localhost:9100/metrics\" target=\"_blank\">Node Exporter</a> | `http://localhost:9100/metrics`\n| <a href=\"http://localhost:19090/metrics\" target=\"_blank\">Ledger API</a> | `http://localhost:19090/metrics`\n| <a href=\"http://localhost:19091/metrics\" target=\"_blank\">HTTP JSON API</a> | `http://localhost:19091/metrics`",
+        "mode": "markdown"
+      },
+      "title": "Daml Platform - Observability Example",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 23,
+        "w": 10,
+        "x": 7,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "maxItems": 100,
+        "query": "",
+        "showHeadings": true,
+        "showRecentlyViewed": false,
+        "showSearch": true,
+        "showStarred": false
+      },
+      "title": "Dashboards",
+      "type": "dashlist"
+    }
+  ],
+  "timepicker": {
+    "hidden": true
+  },
+  "title": "Home",
+  "uid": "home",
+  "version": 1
+}
