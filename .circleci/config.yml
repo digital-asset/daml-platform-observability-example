@@ -1,0 +1,32 @@
+---
+version: 2.1
+
+executors:
+  docker:
+    docker:
+      - image: curlimages/curl:8.00.0
+    resource_class: small
+
+commands:
+  deploy:
+    steps:
+      - compose: 
+          run: docker compose up
+  test_deployment:
+    steps:
+      - query_state:
+          run: ./scripts/validate_deployment.sh
+
+jobs:
+  test_setup:
+    executor: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - deploy:
+          background: true
+      - test_deployment
+
+
+
+workflow:
