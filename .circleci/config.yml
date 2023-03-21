@@ -27,6 +27,7 @@ jobs:
           background: true
       - test_deployment
 
-
-
 workflow:
+  test:
+    jobs:
+      - test_setup
