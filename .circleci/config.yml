@@ -23,7 +23,7 @@ jobs:
           command: docker compose build
       - run:
           name: Pull docker images
-          command: docker compose pull
+          command: docker compose pull --ignore-buildable
       - run:
           background: true
           name: Start the compose setup
