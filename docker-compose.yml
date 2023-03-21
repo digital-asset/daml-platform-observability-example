@@ -17,6 +17,7 @@ services:
     # Oldest supported PostgreSQL version
     # https://www.postgresql.org/support/versioning/
     image: postgres:11.18-bullseye
+    container_name: daml_observability_postgres
     ports:
       - 5432:5432
     environment:
@@ -35,7 +36,8 @@ services:
       retries: 5
 
   canton:
-    image: ${CANTON_IMAGE:-digitalasset/canton-open-source}:${CANTON_VERSION:-latest}
+    image: ${CANTON_IMAGE}:${CANTON_VERSION}
+    container_name: daml_observability_canton
     ports:
       # Participant ledger API
       - 10011:10011
@@ -75,7 +77,8 @@ services:
         condition: service_healthy
 
   console:
-    image: ${CANTON_IMAGE:-digitalasset/canton-open-source}:${CANTON_VERSION:-latest}
+    image: ${CANTON_IMAGE}:${CANTON_VERSION}
+    container_name: daml_observability_canton_console
     environment:
       JAVA_OPTS: "-Xmx1G"
     entrypoint: ["tail", "-f", "/dev/null"]
@@ -90,6 +93,7 @@ services:
 
   http-json:
     image: digitalasset/http-json:${SDK_VERSION}
+    container_name: daml_observability_http_json
     build:
       context: ./http-json
       dockerfile: Dockerfile
@@ -129,6 +133,7 @@ services:
     # Oldest Prometheus LTS version
     # https://prometheus.io/docs/introduction/release-cycle/
     image: prom/prometheus:v2.37.5
+    container_name: daml_observability_prometheus
     command:
       # Prometheus configuration
       - --config.file=/etc/prometheus/prometheus.yml
@@ -151,6 +156,7 @@ services:
     # Latest Grafana version
     # https://grafana.com/docs/grafana/latest/release-notes/
     image: grafana/grafana:9.3.6-ubuntu
+    container_name: daml_observability_grafana
     volumes:
       # Grafana configuration
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
@@ -173,31 +179,26 @@ services:
     # Prometheus Node Exporter
     # https://github.com/prometheus/node_exporter/
     image: prom/node-exporter:v1.4.1
-    ports:
-      - 9100:9100
+    container_name: daml_observability_node_exporter
 
   loki:
     image: grafana/loki:2.7.3
+    container_name: daml_observability_loki
     command: -config.file=/etc/loki/loki.yaml
     volumes:
       # Loki configuration
       - ./loki/loki.yaml:/etc/loki/loki.yaml
       # Loki persistent data
       - loki:/loki
-    ports:
-      - "5000:5000"
-      - "5001:5001"
     depends_on:
       - promtail
 
   promtail:
     image: grafana/promtail:2.7.3
+    container_name: daml_observability_promtail
     command: -config.file=/etc/promtail/promtail.yml
     volumes:
       # Loki configuration
       - ./loki/promtail.yaml:/etc/promtail/promtail.yml
       # Logs to scrape
       - logs:/var/log/promtail
-    ports:
-      - "5100:5100"
-      - "5101:5101"

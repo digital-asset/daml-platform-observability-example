@@ -1,0 +1,7 @@
+*.bak
+*.jar
+*.log
+*.old
+*.temp
+.metals
+.idea
