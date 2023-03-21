@@ -9,8 +9,7 @@ result=
 until [ "$retry" -ge 5 ]; do
     # Running the command directly in the prometheus container
     # This is required so that we can run it in CircleCI, more details here: https://circleci.com/docs/building-docker-images/#accessing-services
-    docker ps
-    result=$(docker exec daml_observability_prometheus curl --retry 10 --retry-connrefused 'http://prometheus:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
+    result=$(docker exec daml_observability_prometheus curl --retry 10 --retry-connrefused 'http://prometheus:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status || true)
     if [ -z "$result" ]; then
         echo "Services are registered healthy in prometheus."
         echo "$result"
