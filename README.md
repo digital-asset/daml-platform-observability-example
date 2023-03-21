@@ -50,16 +50,10 @@ Use the `Makefile` — run `make help` for available commands!
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
 Docker Compose will automagically build the [image for the HTTP JSON API service](./http-json/) from the release JAR file.
-Check the [`.env`](./.env) file to know which Canton and SDK version are used, you can change `CANTON_VERSION`, `SDK_VERSION`,
-`LOG_LEVEL`. 
+Check the [`.env`](./.env) file to know which Canton and SDK version are used.
 
-  Examples:
-
-  ```sh
-  CANTON_VERSION=2.6.0
-  SDK_VERSION=2.6.0
-  LOG_LEVEL=DEBUG
-  ```
+⚠️ You can test different versions changing `CANTON_VERSION`, `SDK_VERSION` but there is no guarantees that it will be
+compatible with the currently committed configurations and Grafana dashboards.
 
 ## Startup
 
@@ -110,6 +104,14 @@ docker logs -f obs-grafana-1
 
 ## Configuration
 
+### Log level
+
+For the Canton node and HTTP JSON API service only, you can change `LOG_LEVEL` in the [`.env`](./.env) file:
+
+```sh
+LOG_LEVEL=DEBUG
+```
+
 ### Prometheus
 
 [`prometheus.yml`](./prometheus/prometheus.yml) [[documentation]](https://prometheus.io/docs/prometheus/latest/configuration/configuration/)
@@ -155,9 +157,9 @@ Stop everything, remove networks and all Canton, Prometheus & Grafana data store
 docker compose -p obs down --volumes
 ```
 
-## Using private Canton Docker images
+## Using private Canton/Daml docker images
 
-⚠️  **Digital Asset internal only**
+⚠️ **Digital Asset internal only**
 
 * Make sure your the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
 
