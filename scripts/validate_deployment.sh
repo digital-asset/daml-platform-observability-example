@@ -7,14 +7,14 @@ set -euo pipefail
 retry=0
 result=
 until [ "$retry" -ge 5 ]; do
-    result=$(curl 'http://prometheus:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
-    if [ -z $result ]; then
+    result=$(docker exec daml_observability_prometheus curl --retry 10 --retry-connrefused 'http://prometheus:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
+    if [ -z "$result" ]; then
         echo "Services are registered healthy in prometheus."
-        echo $result
+        echo "$result"
         exit 0
     else
         echo "No healthy service yet, retrying."
-        echo $result
+        echo "$result"
     fi
     retry=$((retry + 1))
     sleep 15
