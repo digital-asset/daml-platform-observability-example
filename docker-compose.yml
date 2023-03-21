@@ -129,6 +129,7 @@ services:
     # Oldest Prometheus LTS version
     # https://prometheus.io/docs/introduction/release-cycle/
     image: prom/prometheus:v2.37.5
+    container_name: daml_observability_prometheus
     command:
       # Prometheus configuration
       - --config.file=/etc/prometheus/prometheus.yml
