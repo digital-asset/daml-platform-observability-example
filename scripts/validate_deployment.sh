@@ -7,7 +7,7 @@ set -euo pipefail
 retry=0
 result=
 until [ "$retry" -ge 5 ]; do
-    result=$(curl 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
+    result=$(curl 'http://prometheus:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
     if [ -z $result ]; then
         echo "Services are registered healthy in prometheus."
         echo $result
