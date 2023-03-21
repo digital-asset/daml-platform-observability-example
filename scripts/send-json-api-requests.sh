@@ -12,8 +12,7 @@ JSON_API_PORT=4001
 function getParty () {
   curl -s \
   -H "Authorization: Bearer ${SOME_JWT}" \
-  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/user" | \
-  jq -r ".result.primaryParty"
+  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/user" > /dev/null 2>&1
 }
 
 # $1 contract JSON
@@ -24,27 +23,27 @@ function createContract () {
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer ${SOME_JWT}" \
   --data @- \
-  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/create" | \
-  jq -r ".result.contractId"
+  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/create" > /dev/null 2>&1
 }
 
-# Generate some traffic.
-
 CURRENT_NUMBER=1
-
 while true
 do
   ((CURRENT_NUMBER+=1))
-
   if [ $((CURRENT_NUMBER % 20)) -eq 0 ]
   then
-    echo $CURRENT_NUMBER
+    echo Iteration $CURRENT_NUMBER
   fi
 
-  if [ $((RANDOM % 10)) -eq 0 ]
+  # Generate some traffic on the standard API endpoints.
+  if [ $((RANDOM % 2)) -eq 0 ]
   then
     createContract "{}"
   else
     getParty
   fi
+
+  # Generate traffic on the health check endpoints.  See https://docs.daml.com/json-api/index.html#healthcheck-endpoints
+  curl http://${JSON_API_HOST}:${JSON_API_PORT}/livez > /dev/null 2>&1
+  curl http://${JSON_API_HOST}:${JSON_API_PORT}/readyz > /dev/null 2>&1
 done
