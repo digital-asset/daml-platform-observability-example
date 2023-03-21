@@ -8,10 +8,6 @@ executors:
     resource_class: small
 
 commands:
-  start_compose:
-    steps:
-      - compose: 
-          run: docker compose up
   test_deployment:
     steps:
       - query_state:
@@ -23,8 +19,10 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - start_compose:
+      - run:
           background: true
+          name: Start the compose setup
+          command: docker compose up
       - test_deployment
 
 workflows:
