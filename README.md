@@ -5,13 +5,20 @@ features available, along with a few example Grafana dashboards for monitoring D
 
 ## License
 
-**Please bear in mind that this project is provided for illustrative purposes only, and as such may not be production quality and/or may not fit your use-cases. You may use the contents of this repo in parts or in whole according to the 0BSD license:**
+**Please bear in mind that this project is provided for illustrative purposes only,
+and as such may not be production quality and/or may not fit your use-cases.
+You may use the contents of this repo in parts or in whole according to the 0BSD license:**
 
 > Copyright (c) 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
 >
 > Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 >
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
+> THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT
+> SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR
+> ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+> OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH
+> THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 > **This repository does not accept Pull Requests at the moment.**
 
@@ -42,37 +49,11 @@ Use the `Makefile` — run `make help` for available commands!
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-## Setup
+Docker Compose will automagically build the [image for the HTTP JSON API service](./http-json/) from the release JAR file.
+Check the [`.env`](./.env) file to know which Canton and SDK version are used.
 
-* Make sure your Docker daemon has been logged in to `digitalasset-docker.jfrog.io`:
-
-    ```sh
-    docker login digitalasset-docker.jfrog.io -u <your-username>
-    ```
-
-  If you haven't logged in before, you can get an access key by logging in to
-  [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your Google account and
-  generating an identity token on your
-  [Artifactory profile page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile).
-
-* Docker Compose will automagically build the [image for the HTTP JSON API service](./http-json/) from the release JAR file
-
-* Check the [`.env`](./.env) file to know which Canton and SDK version are used, you might want to change `SDK_VERSION`, `CANTON_VERSION`.
-You can also switch to the open source version (pulled from Docker Hub) changing `CANTON_IMAGE`.
-
-  Examples:
-
-  ```sh
-  CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
-  CANTON_VERSION=20221129
-  SDK_VERSION=2.5.0-snapshot.20221201.11065.0.caac1d10
-  ```
-
-  ```sh
-  CANTON_IMAGE=digitalasset/canton-open-source
-  CANTON_VERSION=2.5.1
-  SDK_VERSION=2.5.1
-  ```
+⚠️ You can test different versions changing `CANTON_VERSION`, `SDK_VERSION` but there is no guarantees that it will be
+compatible with the currently committed configurations and Grafana dashboards.
 
 ## Startup
 
@@ -123,6 +104,14 @@ docker logs -f obs-grafana-1
 
 ## Configuration
 
+### Log level
+
+For the Canton node and HTTP JSON API service only, you can change `LOG_LEVEL` in the [`.env`](./.env) file:
+
+```sh
+LOG_LEVEL=DEBUG
+```
+
 ### Prometheus
 
 [`prometheus.yml`](./prometheus/prometheus.yml) [[documentation]](https://prometheus.io/docs/prometheus/latest/configuration/configuration/)
@@ -167,3 +156,28 @@ Stop everything, remove networks and all Canton, Prometheus & Grafana data store
 ```sh
 docker compose -p obs down --volumes
 ```
+
+## Using private Canton/Daml docker images
+
+⚠️ **Digital Asset internal only**
+
+* Make sure your the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
+
+    ```sh
+    docker login digitalasset-docker.jfrog.io -u <your-username>
+    ```
+
+  If you haven't logged in before, you can get an access key by logging in to
+  [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your Google account and
+  generating an identity token on your
+  [Artifactory profile page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile).
+  If your email is john.doe@digitalasset.com => your Artifactory useername is `john.doe`.
+
+* Check the [`.env`](./.env) file and change `CANTON_IMAGE`, `CANTON_VERSION` to switch from
+the open source version (pulled from Docker Hub) to a snapshot of the enterprise version. Example:
+
+  ```sh
+  CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
+  CANTON_VERSION=20221129
+  SDK_VERSION=2.5.0-snapshot.20221201.11065.0.caac1d10
+  ```
