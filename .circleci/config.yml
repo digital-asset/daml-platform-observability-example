@@ -8,7 +8,7 @@ executors:
     resource_class: small
 
 commands:
-  deploy:
+  start_compose:
     steps:
       - compose: 
           run: docker compose up
@@ -23,11 +23,11 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - deploy:
+      - start_compose:
           background: true
       - test_deployment
 
-workflow:
+workflows:
   test:
     jobs:
       - test_setup
