@@ -19,6 +19,9 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Build docker images
+          command: docker compose build
+      - run:
           name: Pull docker images
           command: docker compose pull
       - run:
