@@ -10,7 +10,7 @@ executors:
 commands:
   test_deployment:
     steps:
-      - run: ./scripts/validate_deployment.sh
+      - run: ./scripts/validate-deployment.sh
 
 jobs:
   test_setup:
