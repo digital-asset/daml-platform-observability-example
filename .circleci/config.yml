@@ -1,23 +1,14 @@
 ---
 version: 2.1
 
-executors:
-  docker:
-    docker:
-      - image: cimg/base:2023.03
-    resource_class: small
-
 commands:
-  test_deployment:
-    steps:
-      - run: ./scripts/validate-deployment.sh
 
 jobs:
   test_setup:
-    executor: docker
+    machine:
+      image: ubuntu-2204:2022.04.2
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Build docker images
           command: docker compose build
@@ -28,7 +19,10 @@ jobs:
           background: true
           name: Start the compose setup
           command: docker compose up
-      - test_deployment
+      - run: ./scripts/validate-deployment.sh
+      - run:
+          when: always
+          command: docker compose down -v
 
 workflows:
   test:
