@@ -8,8 +8,8 @@ retry=0
 result=
 until [ "$retry" -ge 5 ]; do
   # Query Prometheus for daml_health_status > 1
-  result=$(curl -v --retry 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep "daml_health_status")
-  if [ -z "$result" ]; then
+  result=$(curl --retry 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1')
+  if [ $(echo "$result"| jq -r '.data.result | length') -eq 3 ]; then
     echo "Services are registered healthy in prometheus."
     echo "$result"
     exit 0
@@ -22,6 +22,4 @@ until [ "$retry" -ge 5 ]; do
 done
 
 echo "No healthy service was found in the metrics."
-echo "Canton logs"
-docker logs canton
 exit 1
