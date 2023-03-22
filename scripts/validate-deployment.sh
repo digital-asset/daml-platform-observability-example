@@ -7,9 +7,8 @@ set -euo pipefail
 retry=0
 result=
 until [ "$retry" -ge 5 ]; do
-  # Running the command directly in the prometheus container
-  # This is required so that we can run it in CircleCI, more details here: https://circleci.com/docs/building-docker-images/#accessing-services
-  result=$(curl --retry 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
+  # Query Prometheus for daml_health_status > 1
+  result=$(curl -v --retry 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1' | grep daml_health_status)
   if [ -z "$result" ]; then
     echo "Services are registered healthy in prometheus."
     echo "$result"
