@@ -6,7 +6,7 @@ commands:
 jobs:
   test_setup:
     machine:
-      image: ubuntu-2204:2022.04.2
+      image: ubuntu-2204:2023.02.1
     steps:
       - checkout
       - run:
