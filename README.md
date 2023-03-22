@@ -50,9 +50,9 @@ Use the `Makefile` — run `make help` for available commands!
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
 Docker Compose will automagically build the [image for the HTTP JSON API service](./http-json/) from the release JAR file.
-Check the [`.env`](./.env) file to know which Canton and SDK version are used.
+Check the [`.env`](./.env) file to know which Canton and SDK versions are being used.
 
-⚠️ You can test different versions changing `CANTON_VERSION`, `SDK_VERSION` but there is no guarantees that it will be
+⚠️ You can test different versions changing `CANTON_VERSION` and `SDK_VERSION`, however, there is no guarantee that it will be
 compatible with the currently committed configurations and Grafana dashboards.
 
 ## Startup
@@ -161,7 +161,7 @@ docker compose -p obs down --volumes
 
 ⚠️ **Digital Asset internal only**
 
-* Make sure your the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
+* Make sure the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
 
     ```sh
     docker login digitalasset-docker.jfrog.io -u <your-username>
@@ -171,7 +171,7 @@ docker compose -p obs down --volumes
   [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your Google account and
   generating an identity token on your
   [Artifactory profile page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile).
-  If your email is john.doe@digitalasset.com => your Artifactory useername is `john.doe`.
+  If your email is john.doe@digitalasset.com, your Artifactory username is `john.doe`.
 
 * Check the [`.env`](./.env) file and change `CANTON_IMAGE`, `CANTON_VERSION` to switch from
 the open source version (pulled from Docker Hub) to a snapshot of the enterprise version. Example:
