@@ -1,0 +1,30 @@
+---
+version: 2.1
+
+commands:
+
+jobs:
+  test_setup:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run:
+          name: Build docker images
+          command: docker compose build
+      - run:
+          name: Pull docker images
+          command: docker compose pull --ignore-buildable
+      - run:
+          background: true
+          name: Start the compose setup
+          command: docker compose up
+      - run: ./scripts/validate-deployment.sh
+      - run:
+          when: always
+          command: docker compose down -v
+
+workflows:
+  test:
+    jobs:
+      - test_setup
