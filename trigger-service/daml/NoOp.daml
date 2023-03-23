@@ -1,0 +1,13 @@
+module NoOp where
+
+import qualified Daml.Trigger as T
+
+noOp : T.Trigger ()
+noOp = T.Trigger with
+  initialize = pure ()
+  updateState = \_ -> pure ()
+  rule = \_ -> do
+    debug "triggered"
+    pure ()
+  registeredTemplates = T.AllInDar
+  heartbeat = None

@@ -28,6 +28,15 @@ scrape_configs:
           namespace: static_local
           pod: json
           container: json
+  - job_name: trigger-service
+    static_configs:
+      - targets:
+          # Docker compose service
+          - trigger-service:19092
+        labels:
+          namespace: static_local
+          pod: trigger
+          container: trigger
   - job_name: grafana
     static_configs:
       - targets:
