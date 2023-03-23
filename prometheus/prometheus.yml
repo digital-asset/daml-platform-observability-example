@@ -32,7 +32,7 @@ scrape_configs:
     static_configs:
       - targets:
           # Docker compose service
-          - trigger-service:19092
+          - trigger-service:19090
         labels:
           namespace: static_local
           pod: trigger
