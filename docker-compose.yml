@@ -142,7 +142,7 @@ services:
         DAML_SERVICE: trigger-service
     ports:
       # HTTP JSON API
-      - 4002:8080
+      - 4002:8088
       # Prometheus exporter
       - 19092:19090
     environment:
