@@ -35,6 +35,13 @@ services:
       timeout: 5s
       retries: 5
 
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.12.0
+    container_name: daml_observability_postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable"
+      PG_EXPORTER_AUTO_DISCOVER_DATABASES: true
+
   canton:
     image: ${CANTON_IMAGE}:${CANTON_VERSION}
     container_name: daml_observability_canton

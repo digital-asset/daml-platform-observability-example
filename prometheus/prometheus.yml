@@ -48,3 +48,8 @@ scrape_configs:
       - targets:
         # Docker compose service
         - promtail:5100
+  - job_name: postgres
+    static_configs:
+      - targets:
+          # Docker compose service
+          - postgres-exporter:9187
