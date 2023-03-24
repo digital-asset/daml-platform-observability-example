@@ -10,32 +10,32 @@ help:
 .PHONY: up
 ## up: Docker compose: Start everything (blocking)
 up:
-	docker compose -p obs up --abort-on-container-exit
+	docker compose up --abort-on-container-exit
 
 .PHONY: upd
 ## upd: Docker compose: Start everything (detached)
 upd:
-	docker compose -p obs up -d
+	docker compose up -d
 
 .PHONY: down
 ## down: Docker compose: Stop everything
 down:
-	docker compose -p obs down
+	docker compose down
 
 .PHONY: clean
 ## clean: Docker compose: Stop everything and remove volumes
 clean:
-	docker compose -p obs down --volumes
+	docker compose down --volumes
 
 .PHONY: monitoring
 ## monitoring: Docker compose: Start only Prometheus, Loki & Grafana
 monitoring:
-	docker compose -p obs up grafana --abort-on-container-exit
+	docker compose up grafana --abort-on-container-exit
 
 .PHONY: daml
 ## daml: Docker compose: Start only Postgres, Canton & HTTP JSON API
 daml:
-	docker compose -p obs up http-json -d
+	docker compose up http-json -d
 
 .PHONY: prom
 ## prom: Prometheus: Access Web UI
@@ -50,7 +50,7 @@ prom-reload:
 .PHONY: prom-restart
 ## prom-restart: Prometheus: Restart
 prom-restart:
-	docker compose -p obs restart prometheus
+	docker compose restart prometheus
 
 .PHONY: prom-logs
 ## prom-logs: Prometheus: Follow logs (blocking)
@@ -65,7 +65,7 @@ grafana:
 .PHONY: grafana-restart
 ## grafana-restart: Grafana: Restart
 grafana-restart:
-	docker compose -p obs restart grafana
+	docker compose restart grafana
 
 .PHONY: grafana-logs
 ## grafana-logs: Grafana: Follow logs (blocking)
@@ -75,17 +75,17 @@ grafana-logs:
 .PHONY: console
 ## console: Canton: Open Console
 console:
-	docker exec -it obs-console-1 bin/canton -c /canton/config/console.conf
+	docker exec -it daml_observability_canton_console bin/canton -c /canton/config/console.conf
 
 .PHONY: debug
 ## debug: Canton: Open Shell
 debug:
-	docker exec -it obs-console-1 /bin/bash
+	docker exec -it daml_observability_canton_console /bin/bash
 
 .PHONY: canton-restart
 ## canton-restart: Canton: Restart
 canton-restart:
-	docker compose -p obs restart canton
+	docker compose restart canton
 
 .PHONY: canton-logs
 ## canton-logs: Canton: Follow logs (blocking)
@@ -95,7 +95,7 @@ canton-logs:
 .PHONY: http-json-restart
 ## http-json-restart: HTTP JSON API: Restart
 http-json-restart:
-	docker compose -p obs restart http-json
+	docker compose restart http-json
 
 .PHONY: http-json-logs
 ## http-json-logs: HTTP JSON API: Follow logs (blocking)

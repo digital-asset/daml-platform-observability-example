@@ -1,6 +1,12 @@
 FROM azul/zulu-openjdk-debian:11
 
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
 USER root
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update \
+ && apt-get install --no-install-recommends -y curl
 
 ARG SDK_VERSION
 ARG DAML_SERVICE

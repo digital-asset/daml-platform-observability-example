@@ -1,3 +1,4 @@
+ALTER SYSTEM SET max_connections = 1000;
 CREATE ROLE canton WITH PASSWORD 'supersafe' LOGIN;
 CREATE DATABASE mydomain OWNER canton;
 CREATE DATABASE participant1 OWNER canton;
