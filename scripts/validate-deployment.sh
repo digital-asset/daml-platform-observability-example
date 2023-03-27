@@ -9,6 +9,8 @@ result=
 until [ "$retry" -ge 5 ]; do
   # Query Prometheus for daml_health_status >= 1
   result=$(curl --retry 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1')
+  # http-json, canton domain and participant
+  # trigger-service does not expose health data
   if [ $(echo "$result"| jq -r '.data.result | length') -eq 3 ]; then
     echo "Services are registered healthy in prometheus."
     echo "$result"

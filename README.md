@@ -49,7 +49,7 @@ Use the `Makefile` — run `make help` for available commands!
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-Docker Compose will automagically build the [image for the HTTP JSON API service](./http-json/) from the release JAR file.
+Docker Compose will automagically build the [image for the HTTP JSON API service](daml-service/) from the release JAR file.
 Check the [`.env`](./.env) file to know which Canton and SDK versions are being used.
 
 ⚠️ You can test different versions changing `CANTON_VERSION` and `SDK_VERSION`, however, there is no guarantee that it will be
