@@ -78,6 +78,7 @@ services:
       # Logs
       - logs:/var/log/promtail
     healthcheck:
+      # Requires grpcurl and jq in image
       test: "grpcurl --plaintext localhost:10012 com.digitalasset.canton.health.admin.v0.StatusService.Status | jq -e '.success | select(.active)'"
       interval: 10s
       timeout: 1s
@@ -132,6 +133,7 @@ services:
       # Logs
       - logs:/var/log/promtail
     healthcheck:
+      # Requires curl in image
       test: "curl -f localhost:4001/livez && curl -f localhost:4001/readyz"
       interval: 5s
       timeout: 1s
@@ -166,6 +168,7 @@ services:
       - logs:/var/log/promtail
       - ./trigger-service:/trigger-service
     healthcheck:
+      # Requires curl in image
       test: "curl -f localhost:4002/livez && curl -f localhost:4002/readyz"
       interval: 5s
       timeout: 1s

@@ -1,9 +1,11 @@
 FROM azul/zulu-openjdk-debian:11
 
+# Set default shell (for healthcheck commands)
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 USER root
 
+# We are adding curl to perform HTTP healthchecks with Docker Compose
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get install --no-install-recommends -y curl

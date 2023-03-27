@@ -2,10 +2,12 @@ ARG CANTON_IMAGE
 ARG CANTON_VERSION
 FROM ${CANTON_IMAGE}:${CANTON_VERSION}
 
+# Set default shell (for healthcheck commands)
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 USER root
 
+# We are adding grpcurl and jq to perform gRPC healthchecks with Docker Compose
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get install --no-install-recommends -y curl jq \
