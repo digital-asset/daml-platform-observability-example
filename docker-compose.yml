@@ -132,6 +132,23 @@ services:
       canton:
         condition: service_started
 
+  navigator:
+    image: digitalasset/daml-sdk:${SDK_VERSION}
+    container_name: daml_observability_navigator
+    ports:
+      - 4003:4000
+    command:
+      - "daml"
+      - "navigator"
+      - "server"
+      - "canton"
+      - "10011"
+    volumes:
+      - logs:/var/log/promtail
+    depends_on:
+      canton:
+        condition: service_started
+
   ##
   ## Monitoring services
   ##
