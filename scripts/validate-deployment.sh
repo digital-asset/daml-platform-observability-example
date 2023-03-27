@@ -9,7 +9,7 @@ result=''
 
 until [[ "${retry}" -ge 10 ]]; do
   # Query Prometheus for daml_health_status >= 1
-  result=$(curl -sS --retry 10 --retry-delay 5 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1')
+  result=$(curl -sS --retry 10 --retry-delay 10 --retry-connrefused 'http://localhost:9090/api/v1/query?query=daml_health_status+%3E%3D+1')
   # http-json, canton domain and participant
   # trigger-service does not expose health data
   if [[ $(echo "${result}" | jq -r '.data.result | length') -eq 3 ]]; then
@@ -21,7 +21,7 @@ until [[ "${retry}" -ge 10 ]]; do
     echo "${result}"
   fi
   retry=$((retry + 1))
-  sleep 5
+  sleep 10
 done
 
 echo "No healthy service was found in the metrics."
