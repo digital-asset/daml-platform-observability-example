@@ -28,21 +28,21 @@ services:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     # Wait for PostgreSQL to be up and ready after bootstrap
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:v0.12.0
-    container_name: daml_observability_postgres_exporter
-    environment:
-      DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable"
-      PG_EXPORTER_AUTO_DISCOVER_DATABASES: true
+      test: "pg_isready -U postgres"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
 
   canton:
-    image: ${CANTON_IMAGE}:${CANTON_VERSION}
+    image: digitalasset/canton:${CANTON_VERSION}
     container_name: daml_observability_canton
+    build:
+      context: canton
+      dockerfile: Dockerfile
+      args:
+        CANTON_IMAGE: ${CANTON_IMAGE}
+        CANTON_VERSION: ${CANTON_VERSION}
     ports:
       # Participant ledger API
       - 10011:10011
@@ -77,6 +77,13 @@ services:
       - canton:/canton/data
       # Logs
       - logs:/var/log/promtail
+    healthcheck:
+      # Requires grpcurl and jq in image
+      test: "grpcurl --plaintext localhost:10012 com.digitalasset.canton.health.admin.v0.StatusService.Status | jq -e '.success | select(.active)'"
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
@@ -125,11 +132,17 @@ services:
     volumes:
       # Logs
       - logs:/var/log/promtail
+    healthcheck:
+      # Requires curl in image
+      test: "curl -f localhost:4001/livez && curl -f localhost:4001/readyz"
+      interval: 5s
+      timeout: 1s
+      retries: 3
     depends_on:
       postgres:
         condition: service_healthy
       canton:
-        condition: service_started
+        condition: service_healthy
 
   trigger-service:
     image: digitalasset/trigger-service:${SDK_VERSION}
@@ -154,9 +167,17 @@ services:
       # Logs
       - logs:/var/log/promtail
       - ./trigger-service:/trigger-service
+    healthcheck:
+      # Requires curl in image
+      test: "curl -f localhost:4002/livez && curl -f localhost:4002/readyz"
+      interval: 5s
+      timeout: 1s
+      retries: 3
     depends_on:
+      postgres:
+        condition: service_healthy
       canton:
-        condition: service_started
+        condition: service_healthy
 
   ##
   ## Monitoring services
@@ -213,6 +234,18 @@ services:
     # https://github.com/prometheus/node_exporter/
     image: prom/node-exporter:v1.4.1
     container_name: daml_observability_node_exporter
+
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.12.0
+    container_name: daml_observability_postgres_exporter
+    environment:
+      DATA_SOURCE_USER: "postgres"
+      DATA_SOURCE_PASS: "postgres"
+      DATA_SOURCE_URI: "postgres:5432/postgres?sslmode=disable"
+      PG_EXPORTER_AUTO_DISCOVER_DATABASES: true
+    volumes:
+      # PostgreSQL Server Exporter configuration
+      - ./postgres/postgres_exporter.yml:/postgres_exporter.yml
 
   loki:
     image: grafana/loki:2.7.3

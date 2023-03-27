@@ -4,27 +4,33 @@ version: 2.1
 commands:
 
 jobs:
-  test_setup:
+  test:
     machine:
       image: ubuntu-2204:current
     steps:
       - checkout
       - run:
-          name: Build docker images
+          name: Pull Docker images
+          command: |
+            docker compose pull --quiet --ignore-buildable
+            docker pull --quiet azul/zulu-openjdk-debian:11
+      - run:
+          name: Build Docker images
           command: docker compose build
       - run:
-          name: Pull docker images
-          command: docker compose pull --ignore-buildable
-      - run:
           background: true
-          name: Start the compose setup
-          command: docker compose up
-      - run: ./scripts/validate-deployment.sh
+          name: Start Docker Compose in the background
+          command: docker compose up --abort-on-container-exit
       - run:
+          name: Test Docker Compose
+          command: |
+            ./scripts/validate-deployment.sh
+      - run:
+          name: Stop everything
           when: always
-          command: docker compose down -v
+          command: docker compose down --volumes
 
 workflows:
-  test:
+  Test Docker Compose:
     jobs:
-      - test_setup
+      - test
