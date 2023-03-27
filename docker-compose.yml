@@ -100,7 +100,7 @@ services:
     image: digitalasset/http-json:${SDK_VERSION}
     container_name: daml_observability_http_json
     build:
-      context: daml
+      context: daml-service
       dockerfile: Dockerfile
       args:
         SDK_VERSION: ${SDK_VERSION}
@@ -121,7 +121,7 @@ services:
       - "--http-port=4001"
       - "--metrics-reporter=prometheus://0.0.0.0:19091"
       - "--allow-insecure-tokens"
-      - "--query-store-jdbc-config=driver=org.postgresql.Driver,url=jdbc:postgresql://postgres:5432/jsonapi?&ssl=false,user=canton,password=supersafe,start-mode=create-and-start"
+      - "--query-store-jdbc-config=driver=org.postgresql.Driver,url=jdbc:postgresql://postgres:5432/http_json?&ssl=false,user=canton,password=supersafe,start-mode=create-and-start"
     volumes:
       # Logs
       - logs:/var/log/promtail
@@ -135,13 +135,12 @@ services:
     image: digitalasset/trigger-service:${SDK_VERSION}
     container_name: daml_observability_trigger_service
     build:
-      context: daml
+      context: daml-service
       dockerfile: Dockerfile
       args:
         SDK_VERSION: ${SDK_VERSION}
         DAML_SERVICE: trigger-service
     ports:
-      # HTTP JSON API
       - 4002:8088
       # Prometheus exporter
       - 19092:19090
