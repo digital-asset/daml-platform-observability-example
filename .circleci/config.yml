@@ -24,7 +24,6 @@ jobs:
       - run:
           name: Test Docker Compose
           command: |
-            sleep 10s
             ./scripts/validate-deployment.sh
       - run:
           name: Stop everything
