@@ -169,9 +169,7 @@ services:
       - "server"
       - "canton"
       - "10011"
-    volumes:
-      - logs:/var/log/promtail
-      
+
   ##
   ## Monitoring services
   ##
