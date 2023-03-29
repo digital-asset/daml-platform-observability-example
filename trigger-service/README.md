@@ -9,3 +9,4 @@ curl --request POST --data '{
   "applicationId": "test-app-id"
 }' -H 'Content-Type: application/json' localhost:4002/v1/triggers
 ```
+The script ```../scripts/send-trigger-requests.sh``` generates load for the trigger.

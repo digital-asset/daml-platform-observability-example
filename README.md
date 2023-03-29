@@ -1,13 +1,21 @@
-# Daml Platform - Observability Example
+# [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) - Observability Example
 
-This repo demonstrates how you can set up your Daml deployment to leverage the observability
-features available, along with a few example Grafana dashboards for monitoring Daml services.
+This project demonstrates a [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise)
+deployment's observability features, along with example Grafana dashboards.  
+
+The project is self contained:  providing load generations scripts to generate
+the metrics that are collected for display in the Grafana  dashboards.  
+
+This project is provided for illustrative purposes so additional hardening is
+needed for production use. The samples have been tested on MacOS and Linux --
+some Docker images may not be available for Windows.
+This repository does not accept Pull Requests at the moment.
 
 ## License
 
-**Please bear in mind that this project is provided for illustrative purposes only,
-and as such may not be production quality and/or may not fit your use-cases.
-You may use the contents of this repo in parts or in whole according to the 0BSD license:**
+**You may use the contents of this repo in parts or in whole according to the
+0BSD license:**
 
 > Copyright (c) 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
 >
@@ -20,27 +28,37 @@ You may use the contents of this repo in parts or in whole according to the 0BSD
 > OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH
 > THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-> **This repository does not accept Pull Requests at the moment.**
+## TL;DR Quick Start
 
-## Components
+To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed
+and then:
+1. Deploy the containers locally, which include several Daml Enterprise
+components, Prometheus, Grafana, and related containers.  This is done withe
+command:
+```docker compose -p obs up```.
+2. Start the load generation.  There are three scripts that generate the load
+   and running them in separate consoles is best.  The scripts are:
+* ```scripts/generate-grpc-load.sh <number loops>``` this runs the ledger API
+  conformance suite in a loop for the \<number loop\> times.  The default
+  number of loops is 10.  This will generate gRPC traffic that has successful
+  and unsuccessful return codes.
+* ```scripts/send-json-api-requests.sh``` this generates HTTP traffic against
+  the HTTP JSON API server which has successful and unsuccessful requests.  It
+  will loop continuously until stopped with \<ctrl-c\>.
+* ```scripts/send-trigger-requests.sh``` generates traffic for the trigger service.  It
+  will loop continuously until stopped with \<ctrl-c\>.
+3. Login to the Grafana dashboard at
+[http://localhost:3000/dashboards](http://localhost:3000/dashboards).  The
+default user and password: `digitalasset`.  Make sure the time range is set to
+'5 minutes' and refresh is set to '10 seconds' to see results quickly.
+4. When you shutdown, it is recommended that the volumes are cleaned up to free up disk space and
+avoid unnecessary things (e.g., upgrade databases if a new [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise). version is
+released).
 
-You can find a Docker Compose setup here with the following services:
-
-* Daml Platform:
-  * All-in-one Canton node (domain topology manager, mediator, sequencer and participant)
-  * HTTP JSON API service
-  * PostgreSQL database (used by the Canton node and the HTTP JSON API service)
-* Monitoring:
-  * Prometheus `2.x`
-  * Grafana `9.x`
-  * Node Exporter
-  * Loki + Promtail `2.x`
-
-Prometheus and Loki are [preconfigured as datasources for Grafana](./grafana/datasources.yml). You can add other
-services/exporters in the [Docker compose file](./docker-compose.yml) and scrape them changing the
-[Prometheus configuration](./prometheus/prometheus.yml).
-
-Use the `Makefile` — run `make help` for available commands!
+You should see a dashboard like this:
+![Example  
+Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashb").
 
 ## Prerequisites
 
@@ -49,11 +67,44 @@ Use the `Makefile` — run `make help` for available commands!
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-Docker Compose will automagically build the [image for the HTTP JSON API service](daml-service/) from the release JAR file.
-Check the [`.env`](./.env) file to know which Canton and SDK versions are being used.
+Docker Compose will automagically build the [image for the HTTP JSON API
+service](daml-service/) from the release JAR file. Check the [`.env`](./.env)
+file to know which Canton and SDK versions are being used.
 
-⚠️ You can test different versions changing `CANTON_VERSION` and `SDK_VERSION`, however, there is no guarantee that it will be
-compatible with the currently committed configurations and Grafana dashboards.
+⚠️ You can test different versions changing `CANTON_VERSION` and
+`SDK_VERSION`, however, there is no guarantee that it will be compatible with
+the currently committed configurations and Grafana dashboards.
+
+## Containers that are Used
+
+The docker compose file [```docker-compose.yml```](./docker-compose.yml)
+starts the following services for this demo:
+* [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) components:
+  * ```Canton``` which is an [all-in-one, multi-node Canton
+    setup](https://docs.daml.com/canton/usermanual/installation.html#multi-node-setup),
+    in a single container, that runs the following services in a single JVM:
+    domain manager, mediator, sequencer and participant nodes.
+  * [```HTTP JSON API service```](https://docs.daml.com/json-api/index.html#http-json-api-service).
+  * An example [```trigger service```](https://docs.daml.com/tools/trigger-service/index.html#trigger-service).
+  * [PostgreSQL
+    database](https://docs.daml.com/canton/usermanual/persistence.html#id1)
+    which is used by the Canton node and the HTTP JSON API service.
+* Monitoring and log analyssi:
+  * [Prometheus `2.x`](https://prometheus.io/) to collect metrics.
+  * [Grafana `9.x`](https://grafana.com/) for displaying metrics in dashboards.
+  * [Node Exporter](https://prometheus.io/docs/guides/node-exporter/) to collect OS and computing metrics.
+  * [Loki](https://grafana.com/oss/loki/) for log aggregation and analysis.
+  * [Promtail
+    `2.x`](https://grafana.com/docs/loki/latest/clients/promtail/#:~:text=Promtail%20is%20an%20agent%20which,Attaches%20labels%20to%20log%20streams)
+    which ships local logs to Loki.
+
+Prometheus and Loki are [preconfigured as datasources for
+Grafana](./grafana/datasources.yml). You can add other services/exporters in
+the [Docker compose file](./docker-compose.yml) and scrape them changing the
+[Prometheus configuration](./prometheus/prometheus.yml).
+
+Use the `Makefile` — run `make help` for available commands!
+
 
 ## Startup
 
@@ -72,7 +123,27 @@ docker compose -p obs up -d
 If you see the error message `no configuration file provided: not found`
 please check that you are placed at the root of this project.
 
-## Access
+### Starting a Remote Canton Console
+
+```sh
+docker exec -it obs-console-1 bin/canton -c /canton/config/console.conf
+```
+
+## Stopping
+
+* If you used a blocking `docker compose -p obs up`, just cancel via keyboard with `[Ctrl]+[c]`
+
+* If you detached compose: `docker compose -p obs down`
+
+### Cleanup Everything
+
+Stop everything, remove networks and all Canton, Prometheus & Grafana data stored in volumes:
+
+```sh
+docker compose -p obs down --volumes
+```
+
+## Important Endpoints to Explore
 
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (default user and password: `digitalasset`)
@@ -81,13 +152,7 @@ please check that you are placed at the root of this project.
 
 Check all exposed services/ports in the [Docker compose YAML](./docker-compose.yml) definition.
 
-### Canton Console
-
-```sh
-docker exec -it obs-console-1 bin/canton -c /canton/config/console.conf
-```
-
-### Logs
+## Accessing the Logs 
 
 ```sh
 docker logs obs-postgres-1
@@ -104,7 +169,7 @@ docker logs -f obs-grafana-1
 
 ## Configuration
 
-### Log level
+### Canton and HTTP JSON API Log Level
 
 For the Canton node and HTTP JSON API service only, you can change `LOG_LEVEL` in the [`.env`](./.env) file:
 
@@ -132,9 +197,11 @@ Restart on changes: `docker compose -p obs restart grafana`
 
 #### Dashboards
 
-All dashboards (JSON files) are auto-loaded from directory [`grafana/dashboards/`](./grafana/dashboards/)
+All dashboards (JSON files) are auto-loaded from directory
+[`grafana/dashboards/`](./grafana/dashboards/)
 
-* Automatic: place your JSON files in the folder (loaded at startup, reloaded every 30 seconds)
+* Automatic: place your JSON files in the folder (loaded at startup, reloaded
+  every 30 seconds)
 * Manual: create/edit via Grafana UI
 
 ##### Examples Source
@@ -143,41 +210,55 @@ All dashboards (JSON files) are auto-loaded from directory [`grafana/dashboards/
 * Node exporter full [[source]](https://grafana.com/grafana/dashboards/1860-node-exporter-full/)
 * Loki and Promtail [[source]](https://grafana.com/grafana/dashboards/14055-loki-stack-monitoring-promtail-loki/)
 
-## Stop
 
-* If you used a blocking `docker compose -p obs up`, just cancel via keyboard with `[Ctrl]+[c]`
+## Accessing [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker Images
 
-* If you detached compose: `docker compose -p obs down`
+1. Get an access key from digital asset.  This step needs to be performeed
+  once.  If you haven't logged in before, you can get an access key by logging
+  in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your
+  Google account and generating an identity token on your [Artifactory profile
+  page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile). If
+  your email is john.doe@digitalasset.com, your Artifactory username is
+  `john.doe`.
 
-### Cleanup Everything
-
-Stop everything, remove networks and all Canton, Prometheus & Grafana data stored in volumes:
-
-```sh
-docker compose -p obs down --volumes
-```
-
-## Using private Canton/Daml docker images
-
-⚠️ **Digital Asset internal only**
-
-* Make sure the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
+2. Make sure the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
 
     ```sh
     docker login digitalasset-docker.jfrog.io -u <your-username>
     ```
+3. Assign the [`.env`](./.env) file environment variables `CANTON_IMAGE` and
+`CANTON_VERSION` to the version you want. Several  ```.env``` example
+configurations are shown below.
 
-  If you haven't logged in before, you can get an access key by logging in to
-  [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your Google account and
-  generating an identity token on your
-  [Artifactory profile page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile).
-  If your email is john.doe@digitalasset.com, your Artifactory username is `john.doe`.
+This example retrieves the [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) docker
+images for Daml v2.6.0.
 
-* Check the [`.env`](./.env) file and change `CANTON_IMAGE`, `CANTON_VERSION` to switch from
-the open source version (pulled from Docker Hub) to a snapshot of the enterprise version. Example:
+  ```sh
+  CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
+  CANTON_VERSION=2.6.0
+  SDK_VERSION=2.6.0
+  LOG_LEVEL=INFO
+  ```
+
+This example is for a weekly snapshot release that can be used to verify a bug is fixed.  This requires help from the support team.
 
   ```sh
   CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
   CANTON_VERSION=20221129
   SDK_VERSION=2.5.0-snapshot.20221201.11065.0.caac1d10
+  LOG_LEVEL=INFO
+  ```
+
+Finally, to switch from the [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) docker
+images to the open source version (pulled from Docker Hub) set the variables
+to a similar value below.  This example retrieves the v2.5.0 images for the
+open source repo of Daml.
+
+  ```sh
+  CANTON_IMAGE=digitalasset/canton-open-source
+  CANTON_VERSION=2.6.0
+  SDK_VERSION=2.6.0
+  LOG_LEVEL=INFO
   ```

@@ -33,6 +33,7 @@ do
   if [ $((CURRENT_NUMBER % 20)) -eq 0 ]
   then
     echo Iteration $CURRENT_NUMBER
+    sleep 1
   fi
 
   # Generate some traffic on the standard API endpoints.
