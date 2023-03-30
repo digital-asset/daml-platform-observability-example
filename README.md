@@ -7,10 +7,10 @@ deployment's observability features, along with example Grafana dashboards.
 The project is self contained:  providing load generations scripts to generate
 the metrics that are collected for display in the Grafana  dashboards.  
 
-This project is provided for illustrative purposes so additional hardening is
-needed for production use. The samples have been tested on MacOS and Linux --
-some Docker images may not be available for Windows.
-This repository does not accept Pull Requests at the moment.
+This project is provided for illustrative purposes and local use only. The
+samples have been tested on MacOS and Linux -- some Docker images may not be
+available for Windows. This repository does not accept Pull Requests at the
+moment.
 
 ## License
 
