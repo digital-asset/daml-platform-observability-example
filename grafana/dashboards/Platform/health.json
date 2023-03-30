@@ -23,8 +23,8 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 43,
+  "graphTooltip": 2,
+  "id": 9,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -102,14 +102,14 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "0G37dhhVk"
+            "uid": "${datasource}"
           },
           "editorMode": "builder",
           "exemplar": false,
           "expr": "daml_health_status{namespace=\"$namespace\", pod=~\"$pod\"}",
           "format": "time_series",
           "instant": false,
-          "legendFormat": "{{pod}}",
+          "legendFormat": "{{pod}} {{component}}",
           "range": true,
           "refId": "A"
         }
@@ -144,8 +144,8 @@
       {
         "current": {
           "selected": false,
-          "text": "canton-6defa3c6",
-          "value": "canton-6defa3c6"
+          "text": "static_local",
+          "value": "static_local"
         },
         "datasource": {
           "type": "prometheus",
@@ -207,6 +207,6 @@
   "timezone": "",
   "title": "Health",
   "uid": "IME_mP2Vk",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }
