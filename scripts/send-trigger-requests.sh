@@ -31,7 +31,7 @@ do
 
   # Check to make sure the status code was OK
   if [ "${http_code}" != "${GOOD_STATUS}" ]; then
-      echo "ERROR:  CURL status code was ${http_code} but expected ${GOOD_STATUS}.  Existing ...."
+      echo "ERROR:  CURL status code was ${http_code} but expected ${GOOD_STATUS}.  Exiting ...."
       exit 1
   fi
 
