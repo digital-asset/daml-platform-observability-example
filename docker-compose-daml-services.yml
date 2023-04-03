@@ -20,7 +20,7 @@ services:
       # Prometheus exporter
       - 19091:19091
     environment:
-      JAVA_OPTS: "-Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
     command:
       - "--log-level=${LOG_LEVEL:-INFO}"
       - "--log-encoder=json"
@@ -60,7 +60,7 @@ services:
       # Prometheus exporter
       - 19092:19090
     environment:
-      JAVA_OPTS: "-Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
       LOG_ENCODER_JSON: true
       LOG_LEVEL_ROOT: DEBUG
     command:
@@ -92,6 +92,8 @@ services:
       - "server"
       - "canton"
       - "10011"
+    environment:
+      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
     depends_on:
       canton:
         condition: service_healthy
