@@ -1,0 +1,97 @@
+---
+# Copyright 2022 Digital Asset (Switzerland) GmbH and/or its affiliates
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+services:
+
+  http-json:
+    image: digitalasset/http-json:${SDK_VERSION}
+    container_name: daml_observability_http_json
+    build:
+      context: daml-service
+      dockerfile: Dockerfile
+      args:
+        SDK_VERSION: ${SDK_VERSION}
+        DAML_SERVICE: http-json
+    ports:
+      # HTTP JSON API
+      - 4001:4001
+      # Prometheus exporter
+      - 19091:19091
+    environment:
+      JAVA_OPTS: "-Xmx1G"
+    command:
+      - "--log-level=${LOG_LEVEL:-INFO}"
+      - "--log-encoder=json"
+      - "--ledger-host=canton"
+      - "--ledger-port=10011"
+      - "--address=0.0.0.0"
+      - "--http-port=4001"
+      - "--metrics-reporter=prometheus://0.0.0.0:19091"
+      - "--allow-insecure-tokens"
+      - "--query-store-jdbc-config=driver=org.postgresql.Driver,url=jdbc:postgresql://postgres:5432/http_json?&ssl=false,user=canton,password=supersafe,start-mode=create-and-start"
+    volumes:
+      # Logs
+      - logs:/var/log/promtail
+    healthcheck:
+      # Requires curl in image
+      test: "curl -f localhost:4001/livez && curl -f localhost:4001/readyz"
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      canton:
+        condition: service_healthy
+
+  trigger-service:
+    image: digitalasset/trigger-service:${SDK_VERSION}
+    container_name: daml_observability_trigger_service
+    build:
+      context: daml-service
+      dockerfile: Dockerfile
+      args:
+        SDK_VERSION: ${SDK_VERSION}
+        DAML_SERVICE: trigger-service
+    ports:
+      - 4002:8088
+      # Prometheus exporter
+      - 19092:19090
+    environment:
+      JAVA_OPTS: "-Xmx1G"
+      LOG_ENCODER_JSON: true
+      LOG_LEVEL_ROOT: DEBUG
+    command:
+      - "--config=/trigger-service/config.conf"
+    volumes:
+      # Logs
+      - logs:/var/log/promtail
+      - ./trigger-service:/trigger-service
+    healthcheck:
+      # Requires curl in image
+      test: "curl -f localhost:4002/livez && curl -f localhost:4002/readyz"
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      canton:
+        condition: service_healthy
+
+  navigator:
+    image: digitalasset/daml-sdk:${SDK_VERSION}
+    container_name: daml_observability_navigator
+    ports:
+      - 4003:4000
+    command:
+      - "daml"
+      - "navigator"
+      - "server"
+      - "canton"
+      - "10011"
+    depends_on:
+      canton:
+        condition: service_healthy
