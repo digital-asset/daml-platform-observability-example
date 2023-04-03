@@ -114,7 +114,7 @@
           },
           "editorMode": "code",
           "expr": "canton_dirty_requests{namespace=\"$namespace\", participant=~\"$participant\", pod=~\"$pod\"}",
-          "legendFormat": "Dirty Requests - {{pod}} {{participant}}",
+          "legendFormat": "Inflight Dirty Requests - {{pod}} {{participant}}",
           "range": true,
           "refId": "A"
         },
@@ -131,7 +131,7 @@
           "refId": "B"
         }
       ],
-      "title": "Dirty Requests",
+      "title": "Inflight Dirty Requests",
       "type": "timeseries"
     }
   ],

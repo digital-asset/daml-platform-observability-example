@@ -4,8 +4,8 @@ This project demonstrates a [Daml
 Enterprise](https://www.digitalasset.com/products/daml-enterprise)
 deployment's observability features, along with example Grafana dashboards.  
 
-The project is self contained:  providing load generations scripts to generate
-the metrics that are collected for display in the Grafana  dashboards.  
+The project is self contained:  providing scripts to generate requests for
+which metrics are collected for display in the Grafana  dashboards.  
 
 This project is provided for illustrative purposes and local use only. The
 samples have been tested on MacOS and Linux -- some Docker images may not be
@@ -32,26 +32,31 @@ moment.
 
 To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed
 and then:
-1. Deploy the containers locally, which include several Daml Enterprise
+1. Ensure you have enough resources allocated to running the example
+   containers; if a memory resource limit is reached then a container will be
+   randomly killed.  In particular, the ```daml_observability_canton```
+   container can reach a steady state memory usage of 4 GB.
+2. Deploy the containers locally, which include several Daml Enterprise
 components, Prometheus, Grafana, and related containers.  This is done withe
 command:
 ```docker compose -p obs up```.
-2. Start the load generation.  There are three scripts that generate the load
+3. Start the request generation.  There are three scripts that generate the requests
    and running them in separate consoles is best.  The scripts are:
 * ```scripts/generate-grpc-load.sh <number loops>``` this runs the ledger API
   conformance suite in a loop for the \<number loop\> times.  The default
   number of loops is 10.  This will generate gRPC traffic that has successful
-  and unsuccessful return codes.
+  and unsuccessful return codes. Press \<ctrl-c\> multiple times to stop the
+  script.
 * ```scripts/send-json-api-requests.sh``` this generates HTTP traffic against
   the HTTP JSON API server which has successful and unsuccessful requests.  It
   will loop continuously until stopped with \<ctrl-c\>.
 * ```scripts/send-trigger-requests.sh``` generates traffic for the trigger service.  It
   will loop continuously until stopped with \<ctrl-c\>.
-3. Login to the Grafana dashboard at
+4. Login to the Grafana dashboard at
 [http://localhost:3000/dashboards](http://localhost:3000/dashboards).  The
 default user and password: `digitalasset`.  Make sure the time range is set to
 '5 minutes' and refresh is set to '10 seconds' to see results quickly.
-4. When you shutdown, it is recommended that the volumes are cleaned up to free up disk space and
+5. When you shutdown, it is recommended that the volumes are cleaned up to free up disk space and
 avoid unnecessary things (e.g., upgrade databases if a new [Daml
 Enterprise](https://www.digitalasset.com/products/daml-enterprise). version is
 released).

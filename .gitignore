@@ -6,3 +6,5 @@
 .metals
 .idea
 .daml
+.env-2.6.1
+.env-old

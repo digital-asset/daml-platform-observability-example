@@ -30,9 +30,11 @@ CURRENT_NUMBER=1
 while true
 do
   ((CURRENT_NUMBER+=1))
-  if [ $((CURRENT_NUMBER % 20)) -eq 0 ]
+  if [ $((CURRENT_NUMBER % 10)) -eq 0 ]
   then
     echo Iteration $CURRENT_NUMBER
+    # An optinoal sleep to reduce CPU use since it is assuemed this is running
+    # locally on a laptop
     sleep 1
   fi
 
