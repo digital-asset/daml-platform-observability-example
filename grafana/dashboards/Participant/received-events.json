@@ -90,7 +90,7 @@
           "refId": "A"
         }
       ],
-      "title": "Received Events",
+      "title": "Received Events (e.g. transaction, package upload, party allocation)",
       "type": "gauge"
     },
     {
@@ -432,7 +432,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Received Events",
+  "title": "Participant Received Events",
   "uid": "1lW16xh4k",
   "version": 3,
   "weekStart": ""

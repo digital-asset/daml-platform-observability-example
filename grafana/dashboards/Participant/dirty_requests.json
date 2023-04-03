@@ -253,7 +253,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Dirty Requests",
+  "title": "Inflight Dirty Requests",
   "uid": "BAKbwkB4z",
   "version": 2,
   "weekStart": ""
