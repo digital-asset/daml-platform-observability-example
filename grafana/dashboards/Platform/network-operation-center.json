@@ -36,7 +36,7 @@
         "y": 0
       },
       "id": 40,
-      "title": "Events",
+      "title": "Participant Received Events",
       "type": "row"
     },
     {
@@ -221,7 +221,7 @@
           "refId": "A"
         }
       ],
-      "title": "Events",
+      "title": "Participant Received Events",
       "type": "barchart"
     },
     {
@@ -289,7 +289,7 @@
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": false
-        },
+          },
         "orientation": "vertical",
         "showValue": "auto",
         "stacking": "normal",
