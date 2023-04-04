@@ -12,7 +12,7 @@ services:
   postgres:
     # Oldest supported PostgreSQL version
     # https://www.postgresql.org/support/versioning/
-    image: postgres:11.18-bullseye
+    image: postgres:11.19-bullseye
     container_name: daml_observability_postgres
     environment:
       # For default admin user 'postgres'
