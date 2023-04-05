@@ -37,7 +37,7 @@ and then:
    randomly killed.  In particular, the ```daml_observability_canton```
    container can reach a steady state memory usage of 4 GB.
 2. Deploy the containers locally, which include several Daml Enterprise
-components, Prometheus, Grafana, and related containers.  This is done withe
+components, Prometheus, Grafana, and related containers.  This is done with the
 command:
 ```docker compose -p obs up```.
 3. Start the request generation.  There are three scripts that generate the requests
