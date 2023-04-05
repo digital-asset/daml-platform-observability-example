@@ -41,7 +41,7 @@ components, Prometheus, Grafana, and related containers.  This is done with the
 command:
 ```docker compose -p obs up```.
 3. Start the request generation.  There are three scripts that generate the requests
-   and running them in separate shell consoles is best.  The scripts are:
+   and running them in multiple terminals is best.  The scripts are:
 * ```scripts/generate-grpc-load.sh <number loops>``` this runs the ledger API
   conformance suite in a loop for the \<number loop\> times.  The default
   number of loops is 10.  This will generate gRPC traffic that has successful
