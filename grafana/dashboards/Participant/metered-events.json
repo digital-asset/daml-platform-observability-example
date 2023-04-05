@@ -90,7 +90,7 @@
           "refId": "A"
         }
       ],
-      "title": "Metered Events",
+      "title": "Participant Metered Events",
       "type": "gauge"
     },
     {
@@ -183,7 +183,7 @@
           "refId": "A"
         }
       ],
-      "title": "Metered Events",
+      "title": "Participant Metered Events",
       "type": "timeseries"
     }
   ],
@@ -335,7 +335,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Metered Events",
+  "title": "Participant Metered Events",
   "uid": "6x7xtk2Vz",
   "version": 3,
   "weekStart": ""
