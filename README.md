@@ -183,7 +183,7 @@ All dashboards (JSON files) are auto-loaded from directory
 
 ## Accessing [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker Images
 
-1. Get an access key from digital asset.  This step needs to be performeed
+1. Get an access key from Digital Asset.  This step needs to be performed
   once.  If you haven't logged in before, you can get an access key by logging
   in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your
   Google account and generating an identity token on your [Artifactory profile
