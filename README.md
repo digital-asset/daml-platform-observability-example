@@ -47,7 +47,7 @@ command:
   number of loops is 10.  This will generate gRPC traffic that has successful
   and unsuccessful return codes. Press `[Ctrl]+[c]` multiple times to stop the
   script.
-* ```scripts/send-json-api-requests.sh``` this generates HTTP traffic against
+* ```scripts/send-json-api-requests.sh```: this generates HTTP traffic against
   the HTTP JSON API server which has successful and unsuccessful requests.  It
   will loop continuously until stopped with \<ctrl-c\>.
 * ```scripts/send-trigger-requests.sh``` generates traffic for the trigger service.  It
