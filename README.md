@@ -51,7 +51,7 @@ command:
   the [HTTP JSON API Service](https://docs.daml.com/json-api/) which has successful and unsuccessful requests.  It
   will loop continuously until stopped with `[Ctrl]+[c]`.
 * ```scripts/send-trigger-requests.sh```: generates traffic for the [Trigger Service](https://docs.daml.com/tools/trigger-service/index.html).  It
-  will loop continuously until stopped with \<ctrl-c\>.
+  will loop continuously until stopped with `[Ctrl]+[c]`.
 4. Login to the Grafana dashboard at
 [http://localhost:3000/dashboards](http://localhost:3000/dashboards).  The
 default user and password: `digitalasset`.  Make sure the time range is set to
