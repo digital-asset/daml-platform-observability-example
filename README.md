@@ -72,43 +72,8 @@ Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example N
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-Docker Compose will automagically build the [image for the HTTP JSON API
-service](daml-service/) from the release JAR file. Check the [`.env`](./.env)
-file to know which Canton and SDK versions are being used.
-
-⚠️ You can test different versions changing `CANTON_VERSION` and
-`SDK_VERSION`, however, there is no guarantee that it will be compatible with
-the currently committed configurations and Grafana dashboards.
-
-## Containers that are Used
-
-The docker compose file [```docker-compose.yml```](./docker-compose.yml)
-starts the following services for this demo:
-* [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) components:
-  * ```Canton``` which is an [all-in-one, multi-node Canton
-    setup](https://docs.daml.com/canton/usermanual/installation.html#multi-node-setup),
-    in a single container, that runs the following services in a single JVM:
-    domain manager, mediator, sequencer and participant nodes.
-  * [```HTTP JSON API service```](https://docs.daml.com/json-api/index.html#http-json-api-service).
-  * An example [```trigger service```](https://docs.daml.com/tools/trigger-service/index.html#trigger-service).
-  * [PostgreSQL
-    database](https://docs.daml.com/canton/usermanual/persistence.html#id1)
-    which is used by the Canton node and the HTTP JSON API service.
-* Monitoring and log analyssi:
-  * [Prometheus `2.x`](https://prometheus.io/) to collect metrics.
-  * [Grafana `9.x`](https://grafana.com/) for displaying metrics in dashboards.
-  * [Node Exporter](https://prometheus.io/docs/guides/node-exporter/) to collect OS and computing metrics.
-  * [Loki](https://grafana.com/oss/loki/) for log aggregation and analysis.
-  * [Promtail
-    `2.x`](https://grafana.com/docs/loki/latest/clients/promtail/#:~:text=Promtail%20is%20an%20agent%20which,Attaches%20labels%20to%20log%20streams)
-    which ships local logs to Loki.
-
-Prometheus and Loki are [preconfigured as datasources for
-Grafana](./grafana/datasources.yml). You can add other services/exporters in
-the [Docker compose file](./docker-compose.yml) and scrape them changing the
-[Prometheus configuration](./prometheus/prometheus.yml).
-
-Use the `Makefile` — run `make help` for available commands!
+Docker Compose will automagically build the [image for the HTTP JSON API service](daml-service/) from the release JAR file.
+Check the [`.env`](./.env) file to know which Canton and SDK versions are being used.
 
 
 ## Startup

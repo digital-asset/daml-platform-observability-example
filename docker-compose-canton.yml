@@ -1,0 +1,100 @@
+---
+# Copyright 2022 Digital Asset (Switzerland) GmbH and/or its affiliates
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+volumes:
+  canton:
+  postgres:
+
+services:
+
+  postgres:
+    # Oldest supported PostgreSQL version
+    # https://www.postgresql.org/support/versioning/
+    image: postgres:11.19-bullseye
+    container_name: daml_observability_postgres
+    environment:
+      # For default admin user 'postgres'
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # PostgreSQL persistent data
+      - postgres:/var/lib/postgresql/data
+      # PostgreSQL bootstrap queries
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    # Wait for PostgreSQL to be up and ready after bootstrap
+    healthcheck:
+      test: "pg_isready -U postgres"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  canton:
+    image: digitalasset/canton:${CANTON_VERSION}
+    container_name: daml_observability_canton
+    build:
+      context: canton
+      dockerfile: Dockerfile
+      args:
+        CANTON_IMAGE: ${CANTON_IMAGE}
+        CANTON_VERSION: ${CANTON_VERSION}
+    ports:
+      # Participant ledger API
+      - 10011:10011
+      # Participant admin API
+      - 10012:10012
+      # Domain public API
+      - 10018:10018
+      # Domain admin API
+      - 10019:10019
+      # Prometheus exporter
+      - 19090:19090
+    environment:
+      CANTON_AUTO_APPROVE_AGREEMENTS: "yes"
+      CANTON_ALLOCATE_PARTIES: "alice;bob"
+      CANTON_CONNECT_DOMAINS: "mydomain#http://localhost:10018"
+      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx3G"
+    command:
+      - "daemon"
+      - "--log-level-root=${LOG_LEVEL:-INFO}"
+      - "--log-level-canton=${LOG_LEVEL:-INFO}"
+      - "--log-level-stdout=${LOG_LEVEL:-INFO}"
+      - "--log-encoder=json"
+      - "--log-file-name=/var/log/promtail/canton.log"
+      - "--config=/canton/config/monitoring.conf"
+      - "--config=/canton/config/postgres.conf"
+      - "--config=/canton/config/participant.conf,/canton/config/domain.conf"
+      - "--bootstrap=/canton/config/bootstrap.canton"
+    volumes:
+      # Canton configuration
+      - ./canton:/canton/config
+      # Canton persistent data
+      - canton:/canton/data
+      # Logs
+      - logs:/var/log/promtail
+    healthcheck:
+      # Requires grpcurl and jq in image
+      test: "grpcurl --plaintext localhost:10012 com.digitalasset.canton.health.admin.v0.StatusService.Status | jq -e '.success | select(.active)'"
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  console:
+    image: ${CANTON_IMAGE}:${CANTON_VERSION}
+    container_name: daml_observability_canton_console
+    environment:
+      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
+    entrypoint: ["tail", "-f", "/dev/null"]
+    stop_grace_period: "0s"
+    volumes:
+      # Canton configuration
+      - ./canton:/canton/config
+      # Logs
+      - logs:/var/log/promtail
+    depends_on:
+      - canton

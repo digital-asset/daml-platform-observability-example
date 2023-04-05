@@ -90,7 +90,7 @@
           "refId": "A"
         }
       ],
-      "title": "Received Events (e.g. transaction, package upload, party allocation)",
+      "title": "Participant Received Events(e.g. transaction, package upload, party allocation)",
       "type": "gauge"
     },
     {

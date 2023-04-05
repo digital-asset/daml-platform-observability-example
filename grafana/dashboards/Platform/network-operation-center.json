@@ -221,7 +221,7 @@
           "refId": "A"
         }
       ],
-      "title": "Participant Received Events",
+      "title": "Participant Metered Events",
       "type": "barchart"
     },
     {
