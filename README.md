@@ -220,7 +220,7 @@ This example is for a weekly snapshot release that can be used to verify a bug i
   ```
 
 Finally, to switch from the [Daml
-Enterprise](https://www.digitalasset.com/products/daml-enterprise) docker
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
 images to the open source version (pulled from Docker Hub) set the variables
 to a similar value below.  This example retrieves the v2.5.0 images for the
 open source repo of Daml.
