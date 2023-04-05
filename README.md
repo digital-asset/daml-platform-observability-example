@@ -185,8 +185,7 @@ All dashboards (JSON files) are auto-loaded from directory
 
 1. Get an access key from Digital Asset.  This step needs to be performed
   once.  If you haven't logged in before, you can get an access key by logging
-  in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) using your
-  Google account and generating an identity token on your [Artifactory profile
+  in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) and generating an identity token on your [Artifactory profile
   page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile). If
   your email is john.doe@digitalasset.com, your Artifactory username is
   `john.doe`.
