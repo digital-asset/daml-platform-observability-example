@@ -63,7 +63,7 @@ released).
 
 You should see a dashboard like this:
 ![Example  
-Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashb").
+Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashboard")
 
 ## Prerequisites
 
