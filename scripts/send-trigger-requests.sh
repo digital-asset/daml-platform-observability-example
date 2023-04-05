@@ -1,4 +1,4 @@
-#!/usr/bin/env bash +x
+#!/usr/bin/env bash
 # Tool for generating artificial load on the trigger service.
 
 # set -Eeuo pipefail
