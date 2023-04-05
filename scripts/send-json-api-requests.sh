@@ -33,8 +33,7 @@ do
   if [ $((CURRENT_NUMBER % 10)) -eq 0 ]
   then
     echo Iteration $CURRENT_NUMBER
-    # An optinoal sleep to reduce CPU use since it is assuemed this is running
-    # locally on a laptop
+    # Reduce CPU use since it is assumed this is running on a laptop.
     sleep 1
   fi
 
