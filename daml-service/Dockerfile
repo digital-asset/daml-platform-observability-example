@@ -11,9 +11,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get install --no-install-recommends -y curl
 
 ARG SDK_VERSION
+ENV SDK_VERSION="${SDK_VERSION}"
 ARG DAML_SERVICE
-ENV DAML_SERVICE=$DAML_SERVICE
+ENV DAML_SERVICE="${DAML_SERVICE}"
 COPY ./entrypoint.sh /opt/entrypoint.sh
-ADD https://github.com/digital-asset/daml/releases/download/v${SDK_VERSION}/${DAML_SERVICE}-${SDK_VERSION}.jar /opt/service.jar
+ADD "https://github.com/digital-asset/daml/releases/download/v${SDK_VERSION}/${DAML_SERVICE}-${SDK_VERSION}.jar" "/opt/${DAML_SERVICE}.jar"
 
 ENTRYPOINT ["/opt/entrypoint.sh"]

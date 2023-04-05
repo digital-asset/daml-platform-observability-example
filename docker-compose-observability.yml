@@ -14,7 +14,7 @@ services:
   prometheus:
     # Oldest Prometheus LTS version
     # https://prometheus.io/docs/introduction/release-cycle/
-    image: prom/prometheus:v2.37.5
+    image: prom/prometheus:v2.37.6
     container_name: daml_observability_prometheus
     command:
       # Prometheus configuration
@@ -37,7 +37,7 @@ services:
   grafana:
     # Latest Grafana version
     # https://grafana.com/docs/grafana/latest/release-notes/
-    image: grafana/grafana:9.3.6-ubuntu
+    image: grafana/grafana:9.3.11-ubuntu
     container_name: daml_observability_grafana
     volumes:
       # Grafana configuration
@@ -76,7 +76,7 @@ services:
       - ./postgres/postgres_exporter.yml:/postgres_exporter.yml
 
   loki:
-    image: grafana/loki:2.7.3
+    image: grafana/loki:2.7.5
     container_name: daml_observability_loki
     command: -config.file=/etc/loki/loki.yaml
     volumes:
@@ -88,7 +88,7 @@ services:
       - promtail
 
   promtail:
-    image: grafana/promtail:2.7.3
+    image: grafana/promtail:2.7.5
     container_name: daml_observability_promtail
     command: -config.file=/etc/promtail/promtail.yml
     volumes:
