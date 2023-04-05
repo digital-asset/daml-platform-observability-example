@@ -31,7 +31,7 @@ services:
       start_period: 30s
 
   canton:
-    image: digitalasset/canton:${CANTON_VERSION}
+    image: ${CANTON_IMAGE}:${CANTON_VERSION}
     container_name: daml_observability_canton
     build:
       context: canton
