@@ -289,7 +289,7 @@
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": false
-          },
+        },
         "orientation": "vertical",
         "showValue": "auto",
         "stacking": "normal",
