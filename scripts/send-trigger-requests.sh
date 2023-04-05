@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tool for generating artificial load on the trigger service.
 
-# set -Eeuo pipefail
+set -Eeuo pipefail
 
 TRIGGER_API_HOST=localhost
 TRIGGER_API_PORT=4002
