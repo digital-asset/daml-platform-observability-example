@@ -16,9 +16,9 @@ do
   if [ $((CURRENT_NUMBER % 10)) -eq 0 ]
   then
     echo Iteration $CURRENT_NUMBER
-    # Sleep for 1 second after each request.m Triggers should be dependent upon ledger events so 
-    # they aren't expected to be the laod traffic source.  But we do want the load to show up so 
-    # it needs to be comparable to the JSON API server
+    # Sleep for 1 second after each request. Triggers should be dependent upon ledger events so 
+    # they aren't expected to be the load traffic source. However, we do want the load to show up so 
+    # it needs to be comparable to the JSON API server.
     sleep 1
   fi
 
