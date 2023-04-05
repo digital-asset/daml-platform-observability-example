@@ -43,7 +43,7 @@ command:
 3. Start the request generation.  There are three scripts that generate the requests
    and running them in multiple terminals is best.  The scripts are:
 * ```scripts/generate-grpc-load.sh <number loops>``` this runs the ledger API
-  conformance suite in a loop for the \<number loop\> times.  The default
+  conformance suite in a loop for \<number loop\> times.  The default
   number of loops is 10.  This will generate gRPC traffic that has successful
   and unsuccessful return codes. Press \<ctrl-c\> multiple times to stop the
   script.
