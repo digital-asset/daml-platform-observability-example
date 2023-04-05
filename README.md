@@ -200,7 +200,7 @@ All dashboards (JSON files) are auto-loaded from directory
 configurations are shown below.
 
 This example retrieves the [Daml
-Enterprise](https://www.digitalasset.com/products/daml-enterprise) docker
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
 images for Daml v2.6.0.
 
   ```sh
