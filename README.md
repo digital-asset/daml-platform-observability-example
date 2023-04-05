@@ -57,8 +57,8 @@ command:
 default user and password: `digitalasset`.  Make sure the time range is set to
 '5 minutes' and refresh is set to '10 seconds' to see results quickly.
 5. When you shutdown, it is recommended that the volumes are cleaned up to free up disk space and
-avoid unnecessary things (e.g., upgrade databases if a new [Daml
-Enterprise](https://www.digitalasset.com/products/daml-enterprise). version is
+avoid unnecessary steps later (e.g., upgrade databases if a new [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) version is
 released).
 
 You should see a dashboard like this:
