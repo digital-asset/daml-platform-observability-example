@@ -86,22 +86,22 @@ Check all exposed services/ports in the [Docker compose YAML](./docker-compose.y
 ### Canton Console
 
 ```sh
-docker exec -it obs-console-1 bin/canton -c /canton/config/console.conf
+docker exec -it daml_observability_canton_console bin/canton -c /canton/config/console.conf
 ```
 
 ### Logs
 
 ```sh
-docker logs obs-postgres-1
-docker logs obs-prometheus-1
-docker logs obs-grafana-1
+docker logs daml_observability_postgres
+docker logs daml_observability_prometheus
+docker logs daml_observability_grafana
 ```
 You can open multiple terminals and follow logs (blocking command) of a specific container:
 
 ```
-docker logs -f obs-postgres-1
-docker logs -f obs-prometheus-1
-docker logs -f obs-grafana-1
+docker logs -f daml_observability_postgres
+docker logs -f daml_observability_prometheus
+docker logs -f daml_observability_grafana
 ```
 
 ## Configuration
@@ -120,7 +120,7 @@ LOG_LEVEL=DEBUG
 
 Reload or restart on changes:
 * Reload:
-  * Signal: `docker exec -it obs-prometheus-1 -- kill -HUP 1`
+  * Signal: `docker exec -it daml_observability_prometheus -- kill -HUP 1`
   * HTTP: `curl -X POST http://localhost:9090/-/reload`
 * Restart: `docker compose -p obs restart prometheus`
 

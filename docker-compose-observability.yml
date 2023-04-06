@@ -5,9 +5,13 @@
 #
 volumes:
   grafana:
+    name: daml_observability_grafana
   logs:
+    name: daml_observability_logs
   loki:
+    name: daml_observability_loki
   prometheus:
+    name: daml_observability_prometheus
 
 services:
 
