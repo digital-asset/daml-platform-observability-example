@@ -12,10 +12,12 @@ samples have been tested on MacOS and Linux -- some Docker images may not be
 available for Windows. This repository does not accept Pull Requests at the
 moment.
 
+This project uses Daml v2.6.0 or newer.   
+
 ## License
 
-**You may use the contents of this repo in parts or in whole according to the
-0BSD license:**
+** You may use the contents of this repo in parts or in whole according to the
+0BSD license.  **
 
 > Copyright (c) 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
 >
@@ -72,8 +74,34 @@ Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example N
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-Docker Compose will automagically build the [image for the HTTP JSON API service](daml-service/) from the release JAR file.
-Check the [`.env`](./.env) file to know which Canton and SDK versions are being used.
+Docker Compose will automatically build the [image for the HTTP JSON API
+service](daml-service/) from the release JAR file. 
+
+Check the [`.env`](./.env)
+file to know which Canton and SDK versions are being used.  You can test
+different Daml Enterprise versions by changing the `CANTON_VERSION` and
+`SDK_VERSION` variables. However, different versions may not have all the
+metrics in the Grafana dashboards so they will not display metric data.
+
+## Components
+
+You can find a Docker Compose setup here with the following services:
+
+* Daml Platform:
+  * All-in-one Canton node (domain topology manager, mediator, sequencer and participant)
+  * HTTP JSON API service
+  * PostgreSQL database (used by the Canton node and the HTTP JSON API service)
+* Monitoring:
+  * Prometheus `2.x`
+  * Grafana `9.x`
+  * Node Exporter
+  * Loki + Promtail `2.x`
+
+Prometheus and Loki are [preconfigured as datasources for Grafana](./grafana/datasources.yml). You can add other
+services/exporters in the [Docker compose file](./docker-compose.yml) and scrape them changing the
+[Prometheus configuration](./prometheus/prometheus.yml).
+
+Use the `Makefile` — run `make help` for available commands!
 
 ## Startup
 
