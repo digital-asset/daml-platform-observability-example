@@ -86,7 +86,7 @@ Check all exposed services/ports in the [Docker compose YAML](./docker-compose.y
 ### Canton Console
 
 ```sh
-docker exec -it daml_observability_console bin/canton -c /canton/config/console.conf
+docker exec -it daml_observability_canton_console bin/canton -c /canton/config/console.conf
 ```
 
 ### Logs
