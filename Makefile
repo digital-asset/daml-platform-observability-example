@@ -45,7 +45,7 @@ prom:
 .PHONY: prom-reload
 ## prom-reload: Prometheus: Reload configuration
 prom-reload:
-	docker exec -it obs-prometheus-1 kill -HUP 1
+	docker exec -it daml_observability_prometheus-1 kill -HUP 1
 
 .PHONY: prom-restart
 ## prom-restart: Prometheus: Restart
