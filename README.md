@@ -10,8 +10,9 @@ which metrics are collected for display in the Grafana dashboards.
 *Please bear in mind that this project is provided for illustrative purposes only,
 and as such may not be production quality and/or may not fit your use-cases.  The
 samples have been tested on MacOS and Linux -- some Docker images may not be
-available for Windows. This repository does not accept Pull Requests at the
-moment.
+available for Windows. 
+
+This repository does not accept Pull Requests at the moment.
 
 This project uses Daml v2.6.0 or newer.   
 
@@ -78,11 +79,11 @@ Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example N
 Docker Compose will automatically build the [image for the HTTP JSON API
 service](daml-service/) from the release JAR file. 
 
-Check the [`.env`](./.env)
-file to know which Canton and SDK versions are being used.  You can test
-different Daml Enterprise versions by changing the `CANTON_VERSION` and
-`SDK_VERSION` variables. However, different versions may not have all the
-metrics in the Grafana dashboards so they will not display metric data.
+The [`.env`](./.env) file has environment variables to select which Canton and
+SDK versions are being used.  See the section "Accessing Daml Enterprise
+Docker Images" below for more details. Please be aware that different Daml
+Enterprise versions may not generate all the metrics in the Grafana dashboards so
+they may not show up in the dashboard.
 
 ## Components
 
@@ -124,7 +125,7 @@ please check that you are placed at the root of this project.
 ### Starting a Remote Canton Console
 
 ```sh
-docker exec -it obs-console-1 bin/canton -c /canton/config/console.conf
+docker exec -it daml_observability_canton_console bin/canton -c /canton/config/console.conf
 ```
 
 ## Stopping
