@@ -4,8 +4,8 @@ This project demonstrates a [Daml
 Enterprise](https://www.digitalasset.com/products/daml-enterprise)
 deployment's observability features, along with example Grafana dashboards.  
 
-The project is self contained:  providing scripts to generate requests for
-which metrics are collected for display in the Grafana  dashboards.  
+The project is self-contained: providing scripts to generate requests for
+which metrics are collected for display in the Grafana dashboards.  
 
 This project is provided for illustrative purposes and local use only. The
 samples have been tested on MacOS and Linux -- some Docker images may not be
