@@ -45,7 +45,7 @@ prom:
 .PHONY: prom-reload
 ## prom-reload: Prometheus: Reload configuration
 prom-reload:
-	docker exec -it obs-prometheus-1 kill -HUP 1
+	docker exec -it daml_observability_prometheus-1 kill -HUP 1
 
 .PHONY: prom-restart
 ## prom-restart: Prometheus: Restart
@@ -55,7 +55,7 @@ prom-restart:
 .PHONY: prom-logs
 ## prom-logs: Prometheus: Follow logs (blocking)
 prom-logs:
-	docker logs -f obs-prometheus-1
+	docker logs -f daml_observability_prometheus
 
 .PHONY: grafana
 ## grafana: Grafana: Access Web UI
@@ -70,7 +70,7 @@ grafana-restart:
 .PHONY: grafana-logs
 ## grafana-logs: Grafana: Follow logs (blocking)
 grafana-logs:
-	docker logs -f obs-grafana-1
+	docker logs -f daml_observability_grafana
 
 .PHONY: console
 ## console: Canton: Open Console
@@ -90,7 +90,7 @@ canton-restart:
 .PHONY: canton-logs
 ## canton-logs: Canton: Follow logs (blocking)
 canton-logs:
-	docker logs -f obs-canton-1
+	docker logs -f daml_observability_canton
 
 .PHONY: http-json-restart
 ## http-json-restart: HTTP JSON API: Restart
@@ -100,4 +100,4 @@ http-json-restart:
 .PHONY: http-json-logs
 ## http-json-logs: HTTP JSON API: Follow logs (blocking)
 http-json-logs:
-	docker logs -f obs-http-json-1
+	docker logs -f daml_observability_http_json
