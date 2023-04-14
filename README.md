@@ -5,21 +5,19 @@ Enterprise](https://www.digitalasset.com/products/daml-enterprise)
 deployment's observability features, along with example Grafana dashboards.  
 
 The project is self-contained: providing scripts to generate requests for
-which metrics are collected for display in the Grafana dashboards.  
+which metrics are collected for display in the Grafana dashboards.  It requires
+Daml v2.6.0 or newer and have been tested on MacOS and Linux — some Docker
+images may not be available for Windows.
 
-*Please bear in mind that this project is provided for illustrative purposes only,
-and as such may not be production quality and/or may not fit your use-cases.  The
-samples have been tested on MacOS and Linux -- some Docker images may not be
-available for Windows. 
+**Please bear in mind that this project is provided for illustrative purposes only,
+and as such may not be production quality and/or may not fit your use-cases.**
 
-This repository does not accept Pull Requests at the moment.
-
-This project uses Daml v2.6.0 or newer.   
+**This repository does not accept Pull Requests at the moment.**
 
 ## License
 
-** You may use the contents of this repo in parts or in whole according to the
-0BSD license.  **
+**You may use the contents of this repo in parts or in whole according to the
+0BSD license:**
 
 > Copyright (c) 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
 >
