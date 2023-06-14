@@ -1,71 +1,48 @@
 # [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) - Observability Example
 
-This project demonstrates a [Daml
-Enterprise](https://www.digitalasset.com/products/daml-enterprise)
-deployment's observability features, along with example Grafana dashboards.  
+This project demonstrates a [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise)
+deployment's observability features, along with example Grafana dashboards.
 
 The project is self-contained: providing scripts to generate requests for
-which metrics are collected for display in the Grafana dashboards.  It requires
-Daml v2.6.0 or newer and have been tested on MacOS and Linux — some Docker
-images may not be available for Windows.
+which metrics are collected for display in the Grafana dashboards. It requires
+Daml `2.6.0` or newer and have been tested on MacOS and Linux.
 
-**Please bear in mind that this project is provided for illustrative purposes only,
-and as such may not be production quality and/or may not fit your use-cases.**
+**This project is provided for illustrative purposes only, the various configurations
+are tailored for local run and may not fit other use cases.**
 
-**This repository does not accept Pull Requests at the moment.**
-
-## License
-
-**You may use the contents of this repo in parts or in whole according to the
-0BSD license:**
-
-> Copyright (c) 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
->
-> Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
-> THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT
-> SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR
-> ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
-> OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH
-> THE USE OR PERFORMANCE OF THIS SOFTWARE.
+**This repository does not accept contributions at the moment.**
 
 ## TL;DR Quick Start
 
-To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed
-and then:
+To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed and then:
 
 * Ensure you have enough resources allocated to running the example
 containers; if a memory resource limit is reached then a container will be
-randomly killed.  In particular, the `daml_observability_canton`
+randomly killed. In particular, the `daml_observability_canton`
 container can reach a steady state memory usage of 4 GB.
 * Deploy the containers locally, which include several Daml Enterprise
 components, Prometheus, Grafana, and related containers. This is done with the
 command: `docker compose up`.
-* Start the request generation.  There are three scripts that generate the requests
-and running them in multiple terminals is best.  The scripts are:
-  * `scripts/generate-grpc-load.sh <number loops>`: this runs the ledger API
-  conformance suite in a loop for \<number loop\> times.  The default
-  number of loops is 10.  This will generate gRPC traffic that has successful
-  and unsuccessful return codes. Press `[Ctrl]+[c]` multiple times to stop the
-  script.
+* Start the request generation. There are three scripts that generate the requests
+and running them in multiple terminals is best. The scripts are:
+  * `scripts/generate-load.sh`: this runs the ledger API
+  conformance suite in a loop (10 times by default), it will generate gRPC traffic that has successful
+  and unsuccessful return codes. Press `[Ctrl]+[c]` multiple times to stop the script.
   * `scripts/send-json-api-requests.sh`: this generates HTTP traffic against
-  the [HTTP JSON API Service](https://docs.daml.com/json-api/) which has successful and unsuccessful requests.  It
+  the [HTTP JSON API Service](https://docs.daml.com/json-api/) which has successful and unsuccessful requests. It
   will loop continuously until stopped with `[Ctrl]+[c]`.
-  * `scripts/send-trigger-requests.sh`: generates traffic for the [Trigger Service](https://docs.daml.com/tools/trigger-service/index.html).  It
+  * `scripts/send-trigger-requests.sh`: generates traffic for the [Trigger Service](https://docs.daml.com/tools/trigger-service/index.html). It
   will loop continuously until stopped with `[Ctrl]+[c]`.
-* Login to the Grafana dashboard at
-[http://localhost:3000/dashboards](http://localhost:3000/dashboards).  The
-default user and password: `digitalasset`.  Make sure the time range is set to
-'5 minutes' and refresh is set to '10 seconds' to see results quickly.
+* Login to the Grafana dashboard at [http://localhost:3000/dashboards](http://localhost:3000/dashboards).
+The default user and password: `digitalasset`. You can set the time range to 5 minutes and refresh to
+10seconds to see results quickly.
 * When you shutdown, it is recommended that the volumes are cleaned up to free up disk space and
 avoid unnecessary steps later (e.g., upgrade databases if a new [Daml
 Enterprise](https://www.digitalasset.com/products/daml-enterprise) version is
 released).
 
 You should see a dashboard like this:
-![Example  
-Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashboard")
+![Example Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashboard")
 
 ## Prerequisites
 
@@ -74,14 +51,13 @@ Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example N
 * Artifactory credentials to access our private
 [Canton Enterprise Docker images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
 
-Docker Compose will automatically build the [image for the HTTP JSON API
-service](daml-service/) from the release JAR file. 
+Docker Compose will automatically build the [image for the HTTP JSON API service](./daml-service/)
+from the release JAR file.
 
-The [`.env`](./.env) file has environment variables to select which Canton and
-SDK versions are being used.  See the section "Accessing Daml Enterprise
-Docker Images" below for more details. Please be aware that different Daml
-Enterprise versions may not generate all the metrics in the Grafana dashboards so
-they may not show up in the dashboard.
+The [`.env`](./.env) file has environment variables to select which Canton and SDK versions
+are being used. See the section "Accessing Daml Enterprise Docker Images" below for more details.
+Please be aware that different Daml Enterprise versions may not generate all the metrics in
+the Grafana dashboards so they may not show up in the dashboard.
 
 ## Components
 
@@ -203,8 +179,7 @@ Restart on changes: `docker compose restart grafana`
 All dashboards (JSON files) are auto-loaded from directory
 [`grafana/dashboards/`](./grafana/dashboards/)
 
-* Automatic: place your JSON files in the folder (loaded at startup, reloaded
-  every 30 seconds)
+* Automatic: place your JSON files in the folder (loaded at startup, reloaded every 30 seconds)
 * Manual: create/edit via Grafana UI
 
 ##### Examples Source
@@ -216,8 +191,7 @@ All dashboards (JSON files) are auto-loaded from directory
 
 ## Accessing [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker Images
 
-* Get an access key from Digital Asset.  This step needs to be performed
-once.  If you haven't logged in before, you can get an access key by logging
+* Get an access key from Digital Asset.  This step needs to be performed once.  If you haven't logged in before, you can get an access key by logging
 in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) and generating an identity token on your [Artifactory profile
 page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile). If
 your email is john.doe@digitalasset.com, your Artifactory username is
@@ -225,42 +199,60 @@ your email is john.doe@digitalasset.com, your Artifactory username is
 
 * Make sure the Docker daemon is logged in to `digitalasset-docker.jfrog.io`:
 
-    ```sh
-    docker login digitalasset-docker.jfrog.io -u <your-username>
-    ```
+```sh
+docker login digitalasset-docker.jfrog.io -u <your-username>
+```
+
 * Assign the [`.env`](./.env) file environment variables `CANTON_IMAGE` and
 `CANTON_VERSION` to the version you want. Several  ```.env``` example
 configurations are shown below.
 
-  * This example retrieves the [Daml
-  Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
-  images for Daml v2.6.0.
+* This example retrieves the [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
+images for Daml v2.6.0.
 
-  ```sh
-  CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
-  CANTON_VERSION=2.6.0
-  SDK_VERSION=2.6.0
-  LOG_LEVEL=INFO
-  ```
+```sh
+CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
+CANTON_VERSION=2.6.0
+SDK_VERSION=2.6.0
+LOG_LEVEL=INFO
+```
 
-  * This example is for a weekly snapshot release that can be used to verify a bug is fixed.  This requires help from the support team.
+* This example is for a weekly snapshot release that can be used to verify a bug is fixed.  This requires help from the support team.
 
-  ```sh
-  CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
-  CANTON_VERSION=20221129
-  SDK_VERSION=2.5.0-snapshot.20221201.11065.0.caac1d10
-  LOG_LEVEL=INFO
-  ```
+```sh
+CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
+CANTON_VERSION=20221129
+SDK_VERSION=2.5.0-snapshot.20221201.11065.0.caac1d10
+LOG_LEVEL=INFO
+```
 
-  * This example shows how to switch from the [Daml
-  Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
-  images to the open source version (pulled from Docker Hub) set the variables
-  to a similar value below. This example retrieves the v2.5.0 images for the
-  open source repo of Daml.
+* This example shows how to switch from the [Daml
+Enterprise](https://www.digitalasset.com/products/daml-enterprise) Docker
+images to the open source version (pulled from Docker Hub) set the variables
+to a similar value below. This example retrieves the v2.5.0 images for the
+open source repo of Daml.
 
-  ```sh
-  CANTON_IMAGE=digitalasset/canton-open-source
-  CANTON_VERSION=2.6.0
-  SDK_VERSION=2.6.0
-  LOG_LEVEL=INFO
-  ```
+```sh
+CANTON_IMAGE=digitalasset/canton-open-source
+CANTON_VERSION=2.6.0
+SDK_VERSION=2.6.0
+LOG_LEVEL=INFO
+```
+
+## License
+
+**You may use the contents of this repository in parts or in whole according to the `0BSD` license.**
+
+Copyright &copy; 2023 Digital Asset (Switzerland) GmbH and/or its affiliates
+
+> Permission to use, copy, modify, and/or distribute this software for
+> any purpose with or without fee is hereby granted.
+> 
+> THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL
+> WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+> OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+> FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+> DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+> AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+> OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

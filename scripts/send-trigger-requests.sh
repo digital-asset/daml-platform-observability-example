@@ -16,17 +16,17 @@ do
   if [ $((CURRENT_NUMBER % 10)) -eq 0 ]
   then
     echo Iteration $CURRENT_NUMBER
-    # Sleep for 1 second after each request. Triggers should be dependent upon ledger events so 
-    # they aren't expected to be the load traffic source. However, we do want the load to show up so 
+    # Sleep for 1 second after each request. Triggers should be dependent upon ledger events so
+    # they aren't expected to be the load traffic source. However, we do want the load to show up so
     # it needs to be comparable to the JSON API server.
     sleep 1
   fi
 
   # Generate a trigger request
-  http_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --request POST --data '{ 
-    "triggerName": "e0326da3de4b3d4ef4d193907afb82bf9afb938daccea445cbca747bb79c9139:NoOp:noOp", 
-    "party": "alice", 
-    "applicationId": "test-app-id" 
+  http_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --request POST --data '{
+    "triggerName": "e0326da3de4b3d4ef4d193907afb82bf9afb938daccea445cbca747bb79c9139:NoOp:noOp",
+    "party": "alice",
+    "applicationId": "test-app-id"
   }' -H 'Content-Type: application/json' ${TRIGGER_API_HOST}:${TRIGGER_API_PORT}/v1/triggers )
 
   # Check to make sure the status code was OK
