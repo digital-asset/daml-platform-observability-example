@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Generate load by running conformance tests multiple times (defaults to 10)
-
 set -euo pipefail
+
+# Script to generate load by running conformance tests multiple times (defaults to 10)
 
 # Full path to this script
 current_dir=$(cd "$(dirname "${0}")" && pwd)
