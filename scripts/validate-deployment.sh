@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
-## Query Prometheus for the daml_health_status metric and validate that it has the value 1, representing a healthy service
+# Query Prometheus for the daml_health_status metric and validate that it has the value 1,
+# representing a healthy service
 
 retry=0
 result=''
@@ -20,7 +20,7 @@ until [[ "${retry}" -ge 10 ]]; do
     echo "No healthy service yet, retrying."
     echo "${result}"
   fi
-  retry=$((retry + 1))
+  retry=$((retry++))
   sleep 10
 done
 

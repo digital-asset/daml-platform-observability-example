@@ -1,51 +1,46 @@
 #!/usr/bin/env bash
-# Tool for generating artificial load on the HTTP-JSON service.
+set -euo pipefail
 
-set -Eeuo pipefail
+# Script to generate artificial load on the HTTP-JSON service
 
-SOME_JWT=""
-
-JSON_API_HOST=localhost
-JSON_API_PORT=4001
+jwt=''
+json_api_host=localhost
+json_api_port=4001
 
 # returns party ID, or empty
 function getParty () {
-  curl -s \
-  -H "Authorization: Bearer ${SOME_JWT}" \
-  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/user" > /dev/null 2>&1
+  curl -s -o /dev/null \
+    -H "Authorization: Bearer ${jwt}" \
+    "http://${json_api_host}:${json_api_port}/v1/user"
 }
 
-# $1 contract JSON
 # returns contract ID
 function createContract () {
-  echo "$1" | \
-  curl -s \
-  -H 'Content-Type: application/json' \
-  -H "Authorization: Bearer ${SOME_JWT}" \
-  --data @- \
-  "http://${JSON_API_HOST}:${JSON_API_PORT}/v1/create" > /dev/null 2>&1
+  curl -s -o /dev/null \
+    -H 'Content-Type: application/json' \
+    -H "Authorization: Bearer ${jwt}" \
+    --data '{}' \
+    "http://${json_api_host}:${json_api_port}/v1/create"
 }
 
-CURRENT_NUMBER=1
-while true
+loops=10
+
+for i in $(seq 1 "${loops}")
 do
-  ((CURRENT_NUMBER+=1))
-  if [ $((CURRENT_NUMBER % 10)) -eq 0 ]
-  then
-    echo Iteration $CURRENT_NUMBER
-    # Reduce CPU use since it is assumed this is running on a laptop.
-    sleep 1
-  fi
+  echo "# Request ${i} (out of ${loops})"
 
   # Generate some traffic on the standard API endpoints.
-  if [ $((RANDOM % 2)) -eq 0 ]
+  if [ $((RANDOM%2)) -eq 0 ]
   then
-    createContract "{}"
+    createContract
   else
     getParty
   fi
 
-  # Generate traffic on the health check endpoints.  See https://docs.daml.com/json-api/index.html#healthcheck-endpoints
-  curl http://${JSON_API_HOST}:${JSON_API_PORT}/livez > /dev/null 2>&1
-  curl http://${JSON_API_HOST}:${JSON_API_PORT}/readyz > /dev/null 2>&1
+  # Generate traffic on the health check endpoints
+  # https://docs.daml.com/json-api/index.html#healthcheck-endpoints
+  curl -fsSL -o /dev/null http://${json_api_host}:${json_api_port}/livez
+  curl -fsSL -o /dev/null http://${json_api_host}:${json_api_port}/readyz
+
+  sleep 1
 done
