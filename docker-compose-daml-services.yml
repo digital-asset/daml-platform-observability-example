@@ -61,7 +61,7 @@ services:
       - 19092:19090
     environment:
       JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
-      LOG_ENCODER_JSON: true
+      LOG_ENCODER_JSON: 1
       LOG_LEVEL_ROOT: DEBUG
     command:
       - "--config=/trigger-service/config.conf"

@@ -74,7 +74,7 @@ services:
       DATA_SOURCE_USER: "postgres"
       DATA_SOURCE_PASS: "postgres"
       DATA_SOURCE_URI: "postgres:5432/postgres?sslmode=disable"
-      PG_EXPORTER_AUTO_DISCOVER_DATABASES: true
+      PG_EXPORTER_AUTO_DISCOVER_DATABASES: 1
     volumes:
       # PostgreSQL Server Exporter configuration
       - ./postgres/postgres_exporter.yml:/postgres_exporter.yml
