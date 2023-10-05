@@ -14,6 +14,25 @@ are tailored for local run and may not fit other use cases.**
 
 Use the `Makefile` — run `make help` for available commands!
 
+## 🚦 Prerequisites 🚦
+
+* [**Docker**](https://docs.docker.com/get-docker/)
+* [**Docker Compose V2 (as plugin `2.x`)**](https://github.com/docker/compose)
+* Artifactory credentials to access our private
+[Canton Enterprise container images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
+
+⚠️ Docker compose V1 is deprecated and incompatible with this project, check [Docker documentation](https://docs.docker.com/compose/migrate/).
+One sign you are using the wrong version is the command syntax with a dash instead of a space:
+`docker compose` (V2 ✔️) VS `docker-compose` (V1 ❌).
+
+Docker Compose will automatically build the [image for the HTTP JSON API service](./daml-service/)
+from the release JAR file.
+
+The [`.env`](./.env) file has environment variables to select which Canton and SDK versions
+are being used. See [this section below](#accessing-daml-enterprise-container-images) for more details.
+Please be aware that different Daml Enterprise versions may not generate all the metrics in
+the Grafana dashboards so they may not show up in the dashboard.
+
 ## TL;DR Quick Start
 
 To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed and then:
@@ -41,21 +60,6 @@ to start fresh next time.
 
 You should see a dashboard like this:
 ![Example Network Operation Center Health Dashboard](./images/noc_dashboard.png "Example Network Operations Center Health Dashboard")
-
-## Prerequisites
-
-* [**Docker**](https://docs.docker.com/get-docker/)
-* [**Docker Compose plugin `2.x`**](https://github.com/docker/compose)
-* Artifactory credentials to access our private
-[Canton Enterprise container images](https://digitalasset.jfrog.io/ui/repos/tree/General/canton-enterprise-docker/digitalasset/canton-enterprise/latest)
-
-Docker Compose will automatically build the [image for the HTTP JSON API service](./daml-service/)
-from the release JAR file.
-
-The [`.env`](./.env) file has environment variables to select which Canton and SDK versions
-are being used. See [this section below](#accessing-daml-enterprise-container-images) for more details.
-Please be aware that different Daml Enterprise versions may not generate all the metrics in
-the Grafana dashboards so they may not show up in the dashboard.
 
 ## Components
 
