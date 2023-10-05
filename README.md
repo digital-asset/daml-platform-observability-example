@@ -69,7 +69,7 @@ Docker Compose will start the following services:
   * Loki + Promtail `2.x`
 
 Prometheus and Loki are [preconfigured as datasources for Grafana](./grafana/datasources.yml). You can add other
-services/exporters in the [Docker compose file](./docker-compose.yml) and scrape them changing the
+services/exporters in the [Docker compose file](./docker-compose-observability.yml) and scrape them changing the
 [Prometheus configuration](./prometheus/prometheus.yml).
 
 ## Startup
@@ -116,7 +116,10 @@ docker compose down --volumes
 * Loki: http://localhost:5000/ (default user and password: `digitalasset`)
 * Participant's Ledger API endpoint: http://localhost:10011/
 
-Check all exposed services/ports in the [Docker compose YAML](./docker-compose.yml) definition.
+Check all exposed services/ports in the different [Docker compose YAML] files:
+* [Canton](./docker-compose-canton.yml)
+* [Daml services](./docker-compose-daml-services.yml)
+* [Observability stack](./docker-compose-observability.yml)
 
 ### Canton Console
 
