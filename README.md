@@ -43,11 +43,12 @@ Canton can use over 4GB of RAM for example.
   * `scripts/generate-load.sh` (generates gRPC traffic to the Ledger API running the conformance tests in loop)
   * `scripts/send-json-api-requests.sh` (generates HTTP traffic to the [HTTP JSON API Service](https://docs.daml.com/json-api/))
   * `scripts/send-trigger-requests.sh` (generates HTTP traffic to the [Trigger Service](https://docs.daml.com/tools/trigger-service/))
-* Log in to the Grafana at [http://localhost:3000/dashboards](http://localhost:3000/dashboards) using the default
-user and password `digitalasset`. You can lower the time range to 5 minutes and refresh to 10 seconds to see results quickly.
-* When you stop everything, it is recommended to [cleanup everything](#cleanup-everything) to start fresh next time.
+* Log in to the Grafana at [http://localhost:3000/](http://localhost:3000/) using the default
+user and password `digitalasset`. After you open any dashboard, you can lower the time range to 5 minutes and
+refresh to 10 seconds to see results quickly.
+* When you stop, it is recommended to [cleanup everything](#cleanup-everything) to start fresh next time.
 
-You should see a dashboard like this:
+The "Operation Center" dashboard should look like this:
 
 ![Example Dashboard](./images/noc_dashboard.png "Example Dashboard")
 
