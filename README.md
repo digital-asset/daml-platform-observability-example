@@ -32,25 +32,23 @@ are being used. See [this section below](#accessing-daml-enterprise-container-im
 Please be aware that using a different Daml Enterprise version may not generate all the metrics used in
 the Grafana dashboards, some things may not show up.
 
-## TL;DR Quick Start
+## TL;DR
 
-To quickly get up and running, make sure you have the [prerequisites](#Prerequisites) installed and then:
+To quickly get up and running, make sure you have the all [prerequisites](#Prerequisites) installed and then:
 
 * Ensure you have enough CPU/RAM/disk to run this project; if resource limits are reached, a container can be killed.
 Canton can use over 4GB of RAM for example.
 * Start everything: `docker compose up`
-* Create workload: there are various scripts that generate requests, run them in different terminals:
-  * `scripts/generate-load.sh`: this runs the ledger API
-  conformance test suite in a loop (10 times by default), it will generate gRPC traffic that has successful
-  and unsuccessful return codes.
-  * `scripts/send-json-api-requests.sh`: this generates HTTP traffic against
-  the [HTTP JSON API Service](https://docs.daml.com/json-api/) which has successful and unsuccessful requests.
-  * `scripts/send-trigger-requests.sh`: generates traffic for the [Trigger Service](https://docs.daml.com/tools/trigger-service/index.html).
-* Login to the Grafana at [http://localhost:3000/dashboards](http://localhost:3000/dashboards) using the default
-user and password: `digitalasset`. You can set the time range to 5 minutes and refresh to 10 seconds to see results quickly.
+* Create workload: there are various scripts that generate load, run them in different terminals:
+  * `scripts/generate-load.sh` (generates gRPC traffic to the Ledger API running the conformance tests in loop)
+  * `scripts/send-json-api-requests.sh` (generates HTTP traffic to the [HTTP JSON API Service](https://docs.daml.com/json-api/))
+  * `scripts/send-trigger-requests.sh` (generates HTTP traffic to the [Trigger Service](https://docs.daml.com/tools/trigger-service/))
+* Log in to the Grafana at [http://localhost:3000/dashboards](http://localhost:3000/dashboards) using the default
+user and password `digitalasset`. You can lower the time range to 5 minutes and refresh to 10 seconds to see results quickly.
 * When you stop everything, it is recommended to [cleanup everything](#cleanup-everything) to start fresh next time.
 
 You should see a dashboard like this:
+
 ![Example Dashboard](./images/noc_dashboard.png "Example Dashboard")
 
 ## Components
