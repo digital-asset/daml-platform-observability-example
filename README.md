@@ -34,7 +34,7 @@ the Grafana dashboards, some things may not show up.
 
 ## TL;DR
 
-To quickly get up and running, make sure you have the all [prerequisites](#Prerequisites) installed and then:
+To quickly get up and running, **make sure you have all the prerequisites installed** and then:
 
 * Ensure you have enough CPU/RAM/disk to run this project; if resource limits are reached, a container can be killed.
 Canton can use over 4GB of RAM for example.
