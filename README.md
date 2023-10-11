@@ -32,7 +32,7 @@ are being used. See [this section below](#accessing-daml-enterprise-container-im
 Please be aware that using a different Daml Enterprise version may not generate all the metrics used in
 the Grafana dashboards, some things may not show up.
 
-## TL;DR
+## Quickstart
 
 To quickly get up and running, **make sure you have all the prerequisites installed** and then:
 
@@ -46,7 +46,8 @@ Canton can use over 4GB of RAM for example.
 * Log in to the Grafana at [http://localhost:3000/](http://localhost:3000/) using the default
 user and password `digitalasset`. After you open any dashboard, you can lower the time range to 5 minutes and
 refresh to 10 seconds to see results quickly.
-* When you stop, it is recommended to [cleanup everything](#cleanup-everything) to start fresh next time.
+* When you stop, it is recommended to [cleanup everything](#cleanup-everything) and start fresh next time:
+`docker compose down -v`
 
 The "Operation Center" dashboard should look like this:
 
