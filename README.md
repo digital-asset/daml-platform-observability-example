@@ -113,8 +113,8 @@ docker compose down --volumes
 
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (default user and password: `digitalasset`)
-* Loki: http://localhost:5000/ (default user and password: `digitalasset`)
 * Participant's Ledger API endpoint: http://localhost:10011/
+* HTTP JSON API endpoint: http://localhost:4001/
 
 Check all exposed services/ports in the different [Docker compose YAML] files:
 * [Canton](./docker-compose-canton.yml)
@@ -141,6 +141,12 @@ docker logs -f daml_observability_postgres
 docker logs -f daml_observability_prometheus
 docker logs -f daml_observability_grafana
 ```
+
+You can query Loki for logs [using Grafana in the `Explore` section](http://localhost:3000/explore?left=%7B%22datasource%22:%22loki%22%7D).
+
+### Metrics
+
+You can query Prometheus for metrics [using Grafana in the `Explore` section](http://localhost:3000/explore?left=%7B%22datasource%22:%22prometheus%22%7D).
 
 ## Configuration
 
@@ -178,12 +184,21 @@ All dashboards (JSON files) are auto-loaded from directory
 * Automatic: place your JSON files in the folder (loaded at startup, reloaded every 30 seconds)
 * Manual: create/edit via Grafana UI
 
+### Loki
+
+* Loki itself: [`loki.yaml`](./loki/loki.yaml) [[documentation]](https://grafana.com/docs/loki/latest/configure/)
+
+Restart on changes: `docker compose restart loki`
+
+* Promtail: [`promtail.yaml`](./loki/promtail.yaml) [[documentation]](https://grafana.com/docs/loki/latest/send-data/promtail/configuration/)
+
+Restart on changes: `docker compose restart promtail`
+
 ##### Examples Source
 
 * Prometheus and Grafana [[source]](https://github.com/grafana/grafana/tree/main/public/app/plugins/datasource/prometheus/dashboards/)
 * Node exporter full [[source]](https://grafana.com/grafana/dashboards/1860-node-exporter-full/)
 * Loki and Promtail [[source]](https://grafana.com/grafana/dashboards/14055-loki-stack-monitoring-promtail-loki/)
-
 
 ## Accessing Daml Enterprise container images
 
