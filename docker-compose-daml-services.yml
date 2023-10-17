@@ -20,7 +20,7 @@ services:
       # Prometheus exporter
       - 19091:19091
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
     command:
       - "--log-level=${LOG_LEVEL:-INFO}"
       - "--log-encoder=json"
@@ -60,7 +60,7 @@ services:
       # Prometheus exporter
       - 19092:19090
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
       LOG_ENCODER_JSON: true
       LOG_LEVEL_ROOT: DEBUG
     command:
@@ -78,22 +78,5 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      canton:
-        condition: service_healthy
-
-  navigator:
-    image: digitalasset/daml-sdk:${SDK_VERSION}
-    container_name: daml_observability_navigator
-    ports:
-      - 4003:4000
-    command:
-      - "daml"
-      - "navigator"
-      - "server"
-      - "canton"
-      - "10011"
-    environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
-    depends_on:
       canton:
         condition: service_healthy

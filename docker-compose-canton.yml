@@ -16,9 +16,9 @@ volumes:
 services:
 
   postgres:
-    # Oldest supported PostgreSQL version
+    # Latest PostgreSQL version supported by Canton
     # https://www.postgresql.org/support/versioning/
-    image: postgres:11.19-bullseye
+    image: postgres:14.9-bullseye
     container_name: daml_observability_postgres
     environment:
       # For default admin user 'postgres'
@@ -60,7 +60,7 @@ services:
       CANTON_AUTO_APPROVE_AGREEMENTS: "yes"
       CANTON_ALLOCATE_PARTIES: "alice;bob"
       CANTON_CONNECT_DOMAINS: "mydomain#http://localhost:10018"
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx3G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx3G"
     command:
       - "daemon"
       - "--log-level-root=${LOG_LEVEL:-INFO}"
@@ -94,7 +94,7 @@ services:
     image: ${CANTON_IMAGE}:${CANTON_VERSION}
     container_name: daml_observability_canton_console
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
     entrypoint: ["tail", "-f", "/dev/null"]
     stop_grace_period: "0s"
     volumes:
