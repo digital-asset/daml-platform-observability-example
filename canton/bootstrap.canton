@@ -12,10 +12,6 @@ logger.info("Connect participant to domain")
 participant1.domains.connect("mydomain", "http://localhost:10018")
 
 logger.info("Pinging participant to make sure everything is alright")
-
-utils.retry_until_true {
-    participant1.domains.list_connected().nonEmpty
-}
 participant1.health.ping(participant1)
 
 logger.info("Bootstrap succeeded")

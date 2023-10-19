@@ -23,7 +23,7 @@ services:
       JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
     command:
       - "--log-level=${LOG_LEVEL:-INFO}"
-      #- "--log-encoder=json"
+      - "--log-encoder=json"
       - "--ledger-host=canton"
       - "--ledger-port=10011"
       - "--address=0.0.0.0"
@@ -61,8 +61,7 @@ services:
       - 19092:19090
     environment:
       JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
-      #LOG_ENCODER_JSON: true
-      LOG_LEVEL_ROOT: DEBUG
+      LOG_LEVEL_ROOT: ${LOG_LEVEL:-INFO}
     command:
       - "--config=/trigger-service/config.conf"
     volumes:
