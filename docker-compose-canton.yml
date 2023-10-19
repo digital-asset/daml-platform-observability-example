@@ -57,26 +57,22 @@ services:
       # Prometheus exporter
       - 19090:19090
     environment:
-      CANTON_AUTO_APPROVE_AGREEMENTS: "yes"
-      CANTON_ALLOCATE_PARTIES: "alice;bob"
-      CANTON_CONNECT_DOMAINS: "mydomain#http://localhost:10018"
+      #CANTON_AUTO_APPROVE_AGREEMENTS: "yes"
       JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx3G"
     command:
       - "daemon"
       - "--log-level-root=${LOG_LEVEL:-INFO}"
       - "--log-level-canton=${LOG_LEVEL:-INFO}"
       - "--log-level-stdout=${LOG_LEVEL:-INFO}"
-      - "--log-encoder=json"
+      #- "--log-encoder=json"
       - "--log-file-name=/var/log/promtail/canton.log"
       - "--config=/canton/config/monitoring.conf"
       - "--config=/canton/config/postgres.conf"
-      - "--config=/canton/config/participant.conf,/canton/config/domain.conf"
-      - "--bootstrap=/canton/config/bootstrap.canton"
+      - "--config=/canton/config/domain.conf,/canton/config/participant.conf"
+      #- "--bootstrap=/canton/config/bootstrap.canton"
     volumes:
       # Canton configuration
       - ./canton:/canton/config
-      # Canton persistent data
-      - canton:/canton/data
       # Logs
       - logs:/var/log/promtail
     healthcheck:
