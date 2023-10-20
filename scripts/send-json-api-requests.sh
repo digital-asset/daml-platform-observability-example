@@ -37,10 +37,5 @@ do
     getParty
   fi
 
-  # Generate traffic on the health check endpoints
-  # https://docs.daml.com/json-api/index.html#healthcheck-endpoints
-  curl -fsSL -o /dev/null http://${json_api_host}:${json_api_port}/livez
-  curl -fsSL -o /dev/null http://${json_api_host}:${json_api_port}/readyz
-
   sleep 1
 done

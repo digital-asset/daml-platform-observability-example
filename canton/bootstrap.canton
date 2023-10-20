@@ -14,4 +14,9 @@ participant1.domains.connect("mydomain", "http://localhost:10018")
 logger.info("Pinging participant to make sure everything is alright")
 participant1.health.ping(participant1)
 
+// Create party "observability" if not exists
+if (!participant1.parties.hosted().map(_.party.toLf).exists(_.startsWith("observability::")))
+  logger.info("Creating party observability")
+  participant1.parties.enable("observability")
+
 logger.info("Bootstrap succeeded")
