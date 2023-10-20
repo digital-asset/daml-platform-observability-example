@@ -8,8 +8,6 @@ networks:
     name: daml_observability
 
 volumes:
-  canton:
-    name: daml_observability_canton
   postgres:
     name: daml_observability_postgres
 
