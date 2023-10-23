@@ -8,15 +8,19 @@ nodes.all.foreach { node =>
   node.health.wait_for_running()
 }
 
-logger.info("Connect participant to domain")
-participant1.domains.connect("mydomain", "http://localhost:10018")
+// Connect participant to domain if not already done
+if(!participant1.domains.list_registered().map(_._1.domain.unwrap).contains("mydomain")) {
+  logger.info("Connect participant to domain")
+  participant1.domains.connect("mydomain", "http://localhost:10018")
+}
 
 logger.info("Pinging participant to make sure everything is alright")
 participant1.health.ping(participant1)
 
 // Create party "observability" if not exists
-if (!participant1.parties.hosted().map(_.party.toLf).exists(_.startsWith("observability::")))
+if (!participant1.parties.hosted().map(_.party.toLf).exists(_.startsWith("observability::"))) {
   logger.info("Creating party observability")
   participant1.parties.enable("observability")
+}
 
 logger.info("Bootstrap succeeded")
