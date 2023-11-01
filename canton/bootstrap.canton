@@ -9,7 +9,7 @@ nodes.all.foreach { node =>
 }
 
 // Connect participant to domain if not already done
-if(!participant1.domains.list_registered().map(_._1.domain.unwrap).contains("mydomain")) {
+if (!participant1.domains.list_registered().map(_._1.domain.unwrap).contains("mydomain")) {
   logger.info("Connect participant to domain")
   participant1.domains.connect("mydomain", "http://localhost:10018")
 }
@@ -17,10 +17,10 @@ if(!participant1.domains.list_registered().map(_._1.domain.unwrap).contains("myd
 logger.info("Pinging participant to make sure everything is alright")
 participant1.health.ping(participant1)
 
-// Create party "observability" if not exists
-if (!participant1.parties.hosted().map(_.party.toLf).exists(_.startsWith("observability::"))) {
-  logger.info("Creating party observability")
-  participant1.parties.enable("observability")
+// Create party "observabilityExample" if not exists
+if (!participant1.parties.hosted().map(_.party.toLf).exists(_.startsWith("observabilityExample::"))) {
+  logger.info("Creating party observabilityExample")
+  participant1.parties.enable("observabilityExample")
 }
 
 logger.info("Bootstrap succeeded")

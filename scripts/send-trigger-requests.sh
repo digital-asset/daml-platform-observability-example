@@ -12,7 +12,7 @@ do
   # Generate a trigger request
   http_code=$(curl -fsSL -o /dev/null -w "%{http_code}" -X POST \
     -H 'Content-Type: application/json' \
-    --data '{"triggerName":"e0326da3de4b3d4ef4d193907afb82bf9afb938daccea445cbca747bb79c9139:NoOp:noOp","party":"observability","applicationId": "test-app-id"}' \
+    --data '{"triggerName":"e0326da3de4b3d4ef4d193907afb82bf9afb938daccea445cbca747bb79c9139:NoOp:noOp","party":"observabilityExample","applicationId": "test-app-id"}' \
     localhost:4002/v1/triggers)
 
   # Check to make sure the status code was OK
