@@ -20,20 +20,15 @@ services:
       # Prometheus exporter
       - 19091:19091
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
     command:
+      - "--config=/http-json/http-json.conf"
       - "--log-level=${LOG_LEVEL:-INFO}"
       - "--log-encoder=json"
-      - "--ledger-host=canton"
-      - "--ledger-port=10011"
-      - "--address=0.0.0.0"
-      - "--http-port=4001"
-      - "--metrics-reporter=prometheus://0.0.0.0:19091"
-      - "--allow-insecure-tokens"
-      - "--query-store-jdbc-config=driver=org.postgresql.Driver,url=jdbc:postgresql://postgres:5432/http_json?&ssl=false,user=canton,password=supersafe,start-mode=create-and-start"
     volumes:
       # Logs
       - logs:/var/log/promtail
+      - ./http-json:/http-json
     healthcheck:
       # Requires curl in image
       test: "curl -f localhost:4001/livez && curl -f localhost:4001/readyz"
@@ -60,11 +55,11 @@ services:
       # Prometheus exporter
       - 19092:19090
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
-      LOG_ENCODER_JSON: true
-      LOG_LEVEL_ROOT: DEBUG
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx1G"
+      LOG_LEVEL_ROOT: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT_JSON: "true"
     command:
-      - "--config=/trigger-service/config.conf"
+      - "--config=/trigger-service/trigger-service.conf"
     volumes:
       # Logs
       - logs:/var/log/promtail
@@ -78,22 +73,5 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      canton:
-        condition: service_healthy
-
-  navigator:
-    image: digitalasset/daml-sdk:${SDK_VERSION}
-    container_name: daml_observability_navigator
-    ports:
-      - 4003:4000
-    command:
-      - "daml"
-      - "navigator"
-      - "server"
-      - "canton"
-      - "10011"
-    environment:
-      JDK_JAVA_OPTIONS: "-XX:+CrashOnOutOfMemoryError -Xmx1G"
-    depends_on:
       canton:
         condition: service_healthy
