@@ -90,7 +90,7 @@
           "refId": "A"
         }
       ],
-      "title": "Participant Metered Events",
+      "title": "Participant Metered Events - Increase",
       "type": "gauge"
     },
     {
@@ -183,7 +183,7 @@
           "refId": "A"
         }
       ],
-      "title": "Participant Metered Events",
+      "title": "Participant Metered Events - Rate",
       "type": "timeseries"
     }
   ],
