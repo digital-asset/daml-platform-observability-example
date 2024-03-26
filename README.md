@@ -256,7 +256,7 @@ To launch these additional services, follow these steps:
    ```
 4. Run the following to launch the optional services:
    ```
-   docker compose --file docker-compose-extra.yml up --detach
+   docker compose --file docker-compose-extras.yml up --detach
    ```
 5. Explore the PQS database at <http://localhost:8085>, logging in with:
    * System: `PostgreSQL`
