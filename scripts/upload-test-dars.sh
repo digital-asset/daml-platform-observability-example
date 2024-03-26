@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run conformance tests against the Ledger API.
-# https://docs.daml.com/tools/ledger-api-test-tool/index.html
+# Script to upload the  test DARs to the ledger
 
 # Full path to this script
 current_dir=$(cd "$(dirname "${0}")" && pwd)
 
-# shellcheck source=./.env
 source "${current_dir}/../.env"
 
 download_url="https://repo1.maven.org/maven2/com/daml/ledger-api-test-tool/${SDK_VERSION}/ledger-api-test-tool-${SDK_VERSION}.jar"
@@ -21,5 +19,13 @@ else
   echo "### Using existing Ledger API test tool ${SDK_VERSION} JAR file"
 fi
 
-echo "### Running Ledger API conformance tests ${SDK_VERSION} 🛠️"
-java -jar "${jar_file}" "${@:1}" localhost:10011
+echo "### Extracting DARs from Ledger API conformance tests ${SDK_VERSION} 🛠️"
+java -jar "${jar_file}" -x
+
+for i in *.dar; do
+    [ -f "$i" ] || break
+    daml ledger upload-dar --host localhost --port 10011 "$i"
+    rm "$i"
+done
+
+echo '### Done'
