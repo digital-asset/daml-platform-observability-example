@@ -237,6 +237,38 @@ SDK_VERSION=2.6.5
 LOG_LEVEL=INFO
 ```
 
+## Extras
+
+The following optional services are also available:
+
+* Participant Query Store (PQS)
+
+To launch these additional services, follow these steps:
+
+1. Launch the other services, as described in the previous sections.
+2. Run the following script, which is required because the DARs must be uploaded _before_ starting the PQS.  
+   ```
+   scripts/upload-test-dars.sh
+   ```
+3. Run the following script, which is required because the parties must be created _before_ starting the PQS.  
+   ```
+   scripts/generate-load.sh 1 --concurrent-test-runs 1 --include TransactionService
+   ```
+4. Run the following to launch the optional services:
+   ```
+   docker compose --file docker-compose-extras.yml up --detach
+   ```
+5. Explore the PQS database at <http://localhost:8085>, logging in with:
+   * System: `PostgreSQL`
+   * Server: `postgres`
+   * Username: `canton`
+   * Password: `supersafe`
+   * Database: `pqs`
+6. To shutdown these optional containers, run the following:  
+   ```
+   docker compose --file docker-compose-extras.yml down
+   ```
+
 ## License
 
 **You may use the contents of this repository in parts or in whole according to the `0BSD` license.**
