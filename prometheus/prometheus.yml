@@ -62,3 +62,8 @@ scrape_configs:
       - targets:
           # Docker compose service
           - postgres-exporter:9187
+  - job_name: pqs_scribe
+    static_configs:
+      - targets:
+          # Docker compose service
+          - pqs_scribe:9090
