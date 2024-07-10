@@ -10,16 +10,8 @@ current_dir=$(cd "$(dirname "${0}")" && pwd)
 # shellcheck source=./.env
 source "${current_dir}/../.env"
 
-download_url="https://repo1.maven.org/maven2/com/daml/ledger-api-test-tool/${SDK_VERSION}/ledger-api-test-tool-${SDK_VERSION}.jar"
-jar_file=$(basename "${download_url}")
+jar_file=lapitt.jar
 
-if [[ ! -s "${jar_file}" ]]; then
-  echo "### Downloading Ledger API test tool ${SDK_VERSION} JAR file..."
-  curl -fsSLO "${download_url}" \
-
-else
-  echo "### Using existing Ledger API test tool ${SDK_VERSION} JAR file"
-fi
-
-echo "### Running Ledger API conformance tests ${SDK_VERSION} 🛠️"
+echo "### Running Ledger API conformance tests 🛠️"
 java -jar "${jar_file}" "${@:1}" localhost:10011
+java -jar "${jar_file}" "${@:1}" localhost:10021

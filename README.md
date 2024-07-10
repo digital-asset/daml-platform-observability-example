@@ -4,8 +4,7 @@ This project demonstrates a [Daml Enterprise](https://www.digitalasset.com/produ
 deployment's observability features, along with example Grafana dashboards.
 
 The project is self-contained: providing scripts to generate requests for
-which metrics are collected for display in the Grafana dashboards. It requires
-Daml `2.6.5` or newer and has been tested on MacOS and Linux.
+which metrics are collected for display in the Grafana dashboards.
 
 **This project is provided for illustrative purposes only, the various configurations
 are tailored for local run and may not fit other use cases.**
@@ -16,21 +15,18 @@ Use the `Makefile` — run `make help` for available commands!
 
 ## 🚦 Prerequisites 🚦
 
-* [**Docker**](https://docs.docker.com/get-docker/)
-* [**Docker Compose V2 (as plugin `2.x`)**](https://github.com/docker/compose)
-* (Optional) Digital Asset Artifactory credentials to access private [Daml Enterprise container images](#accessing-daml-enterprise-container-images)
+* [**Docker**](https://docs.docker.com/get-docker/).
+* [**Docker Compose V2 (as plugin `2.x`)**](https://github.com/docker/compose).
+* The Canton Enterprise sources.
+  * Build the Canton Docker image: see [this guide](canton/README.md).
+* A matching [Daml SDK](https://github.com/digital-asset/daml/releases) [manually installed](https://docs.daml.com/getting-started/manual-download.html).
+  * Record the version as `SDK_VERSION` in [the env file](.env).
+* A matching ledger API test tool ("LAPITT").
+  * Download the correct version, `dev` variant, of the ledger API test tool from [artifactory](https://digitalasset.jfrog.io/ui/native/canton-internal/com/digitalasset/canton/ledger-api-test-tool_2.13), rename it to `lapitt.jar` and place it into this project's directory.
 
 ⚠️ **Docker compose V1 is deprecated and incompatible with this project**, check [Docker documentation](https://docs.docker.com/compose/migrate/).
 One sign you are using the wrong version is the command syntax with a dash instead of a space:
 `docker compose` (V2 ✔️) VS `docker-compose` (V1 ❌).
-
-Docker Compose will automatically build the [image for the HTTP JSON API service](./daml-service/)
-from the release JAR file.
-
-The [`.env`](./.env) file has environment variables to select which Canton and Daml SDK versions
-are being used. See [this section below](#accessing-daml-enterprise-container-images) for more details.
-Please be aware that using a different Daml Enterprise version may not generate all the metrics used in
-the Grafana dashboards, some things may not show up.
 
 ## Quickstart
 
@@ -41,8 +37,6 @@ Canton can use over 4GB of RAM for example.
 * Start everything: `docker compose up`
 * Create workload: there are various scripts that generate load, run them in different terminals:
   * `scripts/generate-load.sh` (generates gRPC traffic to the Ledger API running the conformance tests in loop)
-  * `scripts/send-json-api-requests.sh` (generates HTTP traffic to the [HTTP JSON API Service](https://docs.daml.com/json-api/))
-  * `scripts/send-trigger-requests.sh` (generates HTTP traffic to the [Trigger Service](https://docs.daml.com/tools/trigger-service/))
 * Log in to the Grafana at [http://localhost:3000/](http://localhost:3000/) using the default
 user and password `digitalasset`. After you open any dashboard, you can lower the time range to 5 minutes and
 refresh to 10 seconds to see results quickly.
@@ -127,6 +121,28 @@ Check all exposed services/ports in the different [Docker compose YAML] files:
 docker exec -it daml_observability_canton_console bin/canton -c /canton/config/console.conf
 ```
 
+For example:
+
+```
+@ participant1.domains.list_registered().map(_._1.domain.unwrap)
+res0: Seq[String] = Vector("mydomain")
+
+@ sequencer1.bft.get_ordering_topology() 
+res1: com.digitalasset.canton.domain.sequencing.sequencer.block.bftordering.admin.EnterpriseSequencerBftAdminData.OrderingTopology = OrderingTopology(
+  currentEpoch = 30L,
+  sequencerIds = Vector(SEQ::sequencer1::122068109171..., SEQ::sequencer2::1220ec0faf93..., SEQ::sequencer3::122078a60382..., SEQ::sequencer4::12203fdba69e...)
+)
+
+sequencer1.bft.get_peer_network_status(None) 
+res2: com.digitalasset.canton.domain.sequencing.sequencer.block.bftordering.admin.EnterpriseSequencerBftAdminData.PeerNetworkStatus = PeerNetworkStatus(
+  endpointStatuses = Vector(
+    PeerEndpointStatus(endpoint = Endpoint(host = "canton", port = Port(n = 30031)), health = PeerEndpointHealth(status = Authenticated, description = None)),
+    PeerEndpointStatus(endpoint = Endpoint(host = "canton", port = Port(n = 30032)), health = PeerEndpointHealth(status = Authenticated, description = None)),
+    PeerEndpointStatus(endpoint = Endpoint(host = "canton", port = Port(n = 30033)), health = PeerEndpointHealth(status = Authenticated, description = None))
+  )
+)
+```
+
 ### Logs
 
 ```sh
@@ -199,75 +215,6 @@ Restart on changes: `docker compose restart promtail`
 * Prometheus and Grafana [[source]](https://github.com/grafana/grafana/tree/main/public/app/plugins/datasource/prometheus/dashboards/)
 * Node exporter full [[source]](https://grafana.com/grafana/dashboards/1860-node-exporter-full/)
 * Loki and Promtail [[source]](https://grafana.com/grafana/dashboards/14055-loki-stack-monitoring-promtail-loki/)
-
-## Accessing Daml Enterprise container images
-
-* Get credentials from Digital Asset support. You can get an access key by logging
-in to [digitalasset.jfrog.io](https://digitalasset.jfrog.io) and generating an identity token in your [Artifactory profile
-page](https://digitalasset.jfrog.io/ui/admin/artifactory/user_profile). If your email is john.doe@digitalasset.com,
-your Artifactory username is `john.doe`.
-
-* Log in to Digital Asset's Artifactory at `digitalasset-docker.jfrog.io`, you will be prompted for the password,
-use your identity token:
-
-```sh
-docker login digitalasset-docker.jfrog.io -u <username>
-```
-
-* Set the [`.env`](./.env) file environment variables `CANTON_IMAGE` and `CANTON_VERSION` to the version you want.
-
-### ```.env``` example configurations
-
-* Using Daml open-source public container images (default), pulled from Docker Hub:
-
-```sh
-CANTON_IMAGE=digitalasset/canton-open-source
-CANTON_VERSION=2.6.5
-SDK_VERSION=2.6.5
-LOG_LEVEL=INFO
-```
-
-* Using [Daml Enterprise](https://www.digitalasset.com/products/daml-enterprise) private container images, pulled from
-Digital Asset's Artifactory:
-
-```sh
-CANTON_IMAGE=digitalasset-docker.jfrog.io/digitalasset/canton-enterprise
-CANTON_VERSION=2.6.5
-SDK_VERSION=2.6.5
-LOG_LEVEL=INFO
-```
-
-## Extras
-
-The following optional services are also available:
-
-* Participant Query Store (PQS)
-
-To launch these additional services, follow these steps:
-
-1. Launch the other services, as described in the previous sections.
-2. Run the following script, which is required because the DARs must be uploaded _before_ starting the PQS.  
-   ```
-   scripts/upload-test-dars.sh
-   ```
-3. Run the following script, which is required because the parties must be created _before_ starting the PQS.  
-   ```
-   scripts/generate-load.sh 1 --concurrent-test-runs 1 --include TransactionService
-   ```
-4. Run the following to launch the optional services:
-   ```
-   docker compose --file docker-compose-extras.yml up --detach
-   ```
-5. Explore the PQS database at <http://localhost:8085>, logging in with:
-   * System: `PostgreSQL`
-   * Server: `postgres`
-   * Username: `canton`
-   * Password: `supersafe`
-   * Database: `pqs`
-6. To shutdown these optional containers, run the following:  
-   ```
-   docker compose --file docker-compose-extras.yml down
-   ```
 
 ## License
 
