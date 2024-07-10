@@ -1,7 +1,10 @@
 ALTER SYSTEM SET max_connections = 1000;
 CREATE ROLE canton WITH PASSWORD 'supersafe' LOGIN;
-CREATE DATABASE mydomain OWNER canton;
 CREATE DATABASE participant1 OWNER canton;
-CREATE DATABASE http_json OWNER canton;
-CREATE DATABASE trigger_service OWNER canton;
-CREATE DATABASE pqs OWNER canton;
+CREATE DATABASE participant2 OWNER canton;
+CREATE DATABASE mediator1 OWNER canton;
+CREATE DATABASE mediator2 OWNER canton;
+CREATE DATABASE sequencer1 OWNER canton;
+CREATE DATABASE sequencer2 OWNER canton;
+CREATE DATABASE sequencer3 OWNER canton;
+CREATE DATABASE sequencer4 OWNER canton;

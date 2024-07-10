@@ -16,7 +16,7 @@ services:
   postgres:
     # Latest PostgreSQL version supported by Canton
     # https://www.postgresql.org/support/versioning/
-    image: postgres:14.9-bullseye
+    image: postgres:16
     container_name: daml_observability_postgres
     environment:
       # For default admin user 'postgres'
@@ -35,37 +35,45 @@ services:
       start_period: 30s
 
   canton:
-    image: digitalasset/canton:${CANTON_VERSION}
+    image: ${CANTON_IMAGE}:${CANTON_VERSION}
     container_name: daml_observability_canton
-    build:
-      context: canton
-      dockerfile: Dockerfile
-      args:
-        CANTON_IMAGE: ${CANTON_IMAGE}
-        CANTON_VERSION: ${CANTON_VERSION}
     ports:
-      # Participant ledger API
+      # Participant ledger APIs
       - 10011:10011
-      # Participant admin API
+      - 10021:10021
+      # Participant admin APIs
       - 10012:10012
-      # Domain public API
-      - 10018:10018
-      # Domain admin API
-      - 10019:10019
+      - 10022:10022
+      # Mediator admin APIs
+      - 4602:4602
+      - 4612:4612
+      # Sequencer APIs
+      - 4401:4401
+      - 4411:4411
+      - 4421:4421
+      - 4431:4431
+      # Sequencer admin APIs
+      - 4402:4402
+      - 4412:4412
+      - 4422:4422
+      - 4432:4432
+      # BFT ordering P2P
+      - 30030:30030
+      - 30031:30031
+      - 30032:30032
+      - 30033:30033
       # Prometheus exporter
       - 19090:19090
     environment:
-      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx3G"
+      JDK_JAVA_OPTIONS: "-XX:+ExitOnOutOfMemoryError -Xmx8G"
     command:
       - "daemon"
       - "--log-level-root=${LOG_LEVEL:-INFO}"
-      - "--log-level-canton=${LOG_LEVEL:-INFO}"
-      - "--log-level-stdout=${LOG_LEVEL:-INFO}"
-      - "--log-encoder=json"
+      - "--log-level-canton=${LOG_LEVEL:-DEBUG}"
+      - "--log-level-stdout=${LOG_LEVEL:-DEBUG}"
+#      - "--log-encoder=json"
       - "--log-file-name=/var/log/promtail/canton.log"
-      - "--config=/canton/config/monitoring.conf"
-      - "--config=/canton/config/postgres.conf"
-      - "--config=/canton/config/domain.conf,/canton/config/participant.conf"
+      - "--config=/canton/config/distributed-domain.conf"
       - "--bootstrap=/canton/config/bootstrap.canton"
     volumes:
       # Canton configuration
